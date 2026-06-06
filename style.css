@@ -1,3 +1,53 @@
 /*
 Codecademy : Web Development Foundations
 */
+
+/* ole-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Ole';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/ole-v3-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+a {
+    color: rgb(224, 142, 235);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.nav-link {
+    cursor: pointer;
+}
+
+.nav-link:hover {
+    color: rgb(224, 142, 235);
+    text-decoration: underline;
+}
+
+.btn {
+    background-color: rgb(55, 125, 160, 0.5);
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/*
+Link, Visited, Hover, Active
+*/
+
+.btn:hover {
+    background-color: rgb(184, 132, 28);
+    text-decoration: none;
+    font-family: 'Ole', sans-serif;
+    font-size: 40px;
+}
+
+.btn:active {
+    background-color: rgb(216, 234, 16);
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: 20px;
+}
