@@ -35,7 +35,11 @@ a {
 }
 
 /*
-Link, Visited, Hover, Active
+Lord Vader Hates Anikin
+Link, 
+Visited, 
+Hover, 
+Active
 */
 
 .btn:hover {
@@ -50,4 +54,8 @@ Link, Visited, Hover, Active
     text-decoration: none;
     font-family: sans-serif;
     font-size: 20px;
+}
+
+.activity {
+    border: 10px solid red;
 }

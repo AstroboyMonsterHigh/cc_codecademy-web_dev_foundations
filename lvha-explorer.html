@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LVHA Explorer — Lord Vader Hates Anakin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf8f0;
+    --bg2: #fff9f2;
+    --panel: #ffffff;
+    --border: #e8ddd0;
+    --text: #2d2416;
+    --muted: #9a8878;
+    --shadow: rgba(80,50,20,0.10);
+
+    --col-l: #0077cc;
+    --col-l-bg: #e8f4fd;
+    --col-l-border: #b3d9f5;
+
+    --col-v: #7c3aed;
+    --col-v-bg: #f3eeff;
+    --col-v-border: #d4bbfa;
+
+    --col-h: #d97706;
+    --col-h-bg: #fff8e6;
+    --col-h-border: #fcd97a;
+
+    --col-a: #dc2626;
+    --col-a-bg: #fff0f0;
+    --col-a-border: #fca5a5;
+
+    --col-base: #64748b;
+
+    --font-display: 'Fredoka One', cursive;
+    --font-body: 'Nunito', sans-serif;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+  }
+
+  /* ─── wavy top band ─── */
+  .top-band {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #a18cd1 100%);
+    padding: 48px 24px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .top-band::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 40px;
+    background: var(--bg);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  .lvha-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .lvha-badge {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 7vw, 4rem);
+    width: clamp(70px, 13vw, 100px);
+    height: clamp(70px, 13vw, 100px);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    transition: transform 0.18s, box-shadow 0.18s;
+    cursor: default;
+    line-height: 1;
+    user-select: none;
+  }
+  .lvha-badge:hover { transform: translateY(-4px) rotate(-2deg); box-shadow: 0 12px 28px rgba(0,0,0,0.18); }
+  .lvha-badge span { font-family: var(--font-body); font-size: 0.55rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; opacity: 0.75; }
+
+  .badge-l { background: #e8f4fd; color: var(--col-l); }
+  .badge-v { background: #f3eeff; color: var(--col-v); }
+  .badge-h { background: #fff8e6; color: var(--col-h); }
+  .badge-a { background: #fff0f0; color: var(--col-a); }
+
+  .top-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    color: #3d2b1f;
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+  .top-sub {
+    font-size: 0.85rem;
+    color: #5a3e2e;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ─── main content ─── */
+  .page-wrap {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-sub {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* ─── STATE CARDS (interactive) ─── */
+  .state-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .scard {
+    background: var(--panel);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    padding: 20px 18px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+  .scard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .scard-base::before  { background: #cbd5e1; }
+  .scard-link::before  { background: var(--col-l); }
+  .scard-visit::before { background: var(--col-v); }
+  .scard-hover::before { background: var(--col-h); }
+  .scard-active::before{ background: var(--col-a); }
+
+  .scard-letter {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .scard-base  .scard-letter { color: var(--col-base); }
+  .scard-link  .scard-letter { color: var(--col-l); }
+  .scard-visit .scard-letter { color: var(--col-v); }
+  .scard-hover .scard-letter { color: var(--col-h); }
+  .scard-active .scard-letter{ color: var(--col-a); }
+
+  .scard-pseudo {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .scard-desc {
+    font-size: 0.8rem;
+    color: #5a4a3a;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .scard-when {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  .scard-base  .scard-when { background: #f1f5f9; color: var(--col-base); }
+  .scard-link  .scard-when { background: var(--col-l-bg); color: var(--col-l); }
+  .scard-visit .scard-when { background: var(--col-v-bg); color: var(--col-v); }
+  .scard-hover .scard-when { background: var(--col-h-bg); color: var(--col-h); }
+  .scard-active .scard-when { background: var(--col-a-bg); color: var(--col-a); }
+
+  /* card hover effects */
+  .scard-link:hover  { border-color: var(--col-l-border); background: var(--col-l-bg); box-shadow: 0 8px 24px rgba(0,119,204,0.12); transform: translateY(-3px); }
+  .scard-visit:hover { border-color: var(--col-v-border); background: var(--col-v-bg); box-shadow: 0 8px 24px rgba(124,58,237,0.12); transform: translateY(-3px); }
+  .scard-hover:hover { border-color: var(--col-h-border); background: var(--col-h-bg); box-shadow: 0 8px 24px rgba(217,119,6,0.12); transform: translateY(-3px); }
+  .scard-active:hover{ border-color: var(--col-a-border); background: var(--col-a-bg); box-shadow: 0 8px 24px rgba(220,38,38,0.12); transform: translateY(-3px); }
+  .scard-active:active { transform: scale(0.97) translateY(1px); box-shadow: 0 2px 8px rgba(220,38,38,0.2); }
+
+  /* ─── COMPARE SPLIT ─── */
+  .compare-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 640px) { .compare-wrap { grid-template-columns: 1fr; } }
+
+  .compare-panel {
+    background: var(--panel);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+
+  .compare-header {
+    padding: 14px 20px;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-bad  { background: #fff0f0; color: var(--col-a); border-bottom: 2px solid #fecaca; }
+  .header-good { background: #f0fdf4; color: #16a34a; border-bottom: 2px solid #bbf7d0; }
+
+  .compare-body {
+    padding: 24px 20px;
+  }
+  .compare-body p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.55;
+  }
+
+  .demo-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  /* ──── WITHOUT LVHA (broken order) ──── */
+  a.no-lvha {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 2px solid;
+    transition: all 0.15s;
+  }
+  /* WRONG ORDER — hover before link/visited means hover is overridden */
+  a.no-lvha:hover {
+    color: var(--col-h);
+    border-color: var(--col-h-border);
+    background: var(--col-h-bg);
+    transform: translateY(-2px);
+  }
+  a.no-lvha:link {
+    color: var(--col-l);
+    border-color: var(--col-l-border);
+    background: var(--col-l-bg);
+  }
+  a.no-lvha:visited {
+    color: var(--col-v);
+    border-color: var(--col-v-border);
+    background: var(--col-v-bg);
+  }
+  /* NOTE: :hover above is now overridden by :visited/:link below it — hover won't work on visited links! */
+  a.no-lvha:active {
+    color: var(--col-a);
+    border-color: var(--col-a-border);
+    background: var(--col-a-bg);
+  }
+
+  /* ──── WITH LVHA (correct order) ──── */
+  a.with-lvha {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 2px solid #e2e8f0;
+    background: #f8fafc;
+    color: var(--col-base);
+    transition: all 0.15s;
+  }
+  a.with-lvha:link {
+    color: var(--col-l);
+    border-color: var(--col-l-border);
+    background: var(--col-l-bg);
+  }
+  a.with-lvha:visited {
+    color: var(--col-v);
+    border-color: var(--col-v-border);
+    background: var(--col-v-bg);
+  }
+  a.with-lvha:hover {
+    color: var(--col-h);
+    border-color: var(--col-h-border);
+    background: var(--col-h-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(217,119,6,0.18);
+  }
+  a.with-lvha:active {
+    color: var(--col-a);
+    border-color: var(--col-a-border);
+    background: var(--col-a-bg);
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(220,38,38,0.2);
+  }
+
+  /* ─── code comparison boxes ─── */
+  .code-compare {
+    font-size: 0.73rem;
+    line-height: 1.7;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+  }
+  .code-bad  { background: #fff8f8; border: 1px solid #fecaca; }
+  .code-good { background: #f0fdf4; border: 1px solid #bbf7d0; }
+
+  .c-sel   { color: #334155; }
+  .c-l     { color: var(--col-l); font-weight: bold; }
+  .c-v     { color: var(--col-v); font-weight: bold; }
+  .c-h     { color: var(--col-h); font-weight: bold; }
+  .c-a     { color: var(--col-a); font-weight: bold; }
+  .c-prop  { color: #0369a1; }
+  .c-val   { color: #15803d; }
+  .c-note  { color: #9a8878; font-style: italic; }
+  .c-strike { text-decoration: line-through; color: #ef4444; opacity: 0.7; }
+
+  /* ─── LIVE DETECTOR ─── */
+  .live-section {
+    background: var(--panel);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    padding: 28px 24px;
+    margin-bottom: 48px;
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+
+  .playground-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .state-detector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+  }
+  .detector-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-right: 4px;
+  }
+  .det-badge {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+    color: var(--muted);
+    background: var(--bg);
+    transition: all 0.1s;
+  }
+  .det-badge.lit-l { border-color: var(--col-l); background: var(--col-l-bg); color: var(--col-l); font-weight: 800; transform: scale(1.08); }
+  .det-badge.lit-v { border-color: var(--col-v); background: var(--col-v-bg); color: var(--col-v); font-weight: 800; transform: scale(1.08); }
+  .det-badge.lit-h { border-color: var(--col-h); background: var(--col-h-bg); color: var(--col-h); font-weight: 800; transform: scale(1.08); }
+  .det-badge.lit-a { border-color: var(--col-a); background: var(--col-a-bg); color: var(--col-a); font-weight: 800; transform: scale(1.08); }
+
+  /* ─── ORDER REMINDER ─── */
+  .order-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 48px;
+    box-shadow: 0 4px 16px var(--shadow);
+  }
+  .order-strip .head {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--text);
+    margin-right: 12px;
+    white-space: nowrap;
+  }
+  .order-pill {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 2px solid;
+    white-space: nowrap;
+  }
+  .op-l { background: var(--col-l-bg); color: var(--col-l); border-color: var(--col-l-border); }
+  .op-v { background: var(--col-v-bg); color: var(--col-v); border-color: var(--col-v-border); }
+  .op-h { background: var(--col-h-bg); color: var(--col-h); border-color: var(--col-h-border); }
+  .op-a { background: var(--col-a-bg); color: var(--col-a); border-color: var(--col-a-border); }
+  .op-arrow { color: var(--muted); font-size: 1.2rem; }
+
+  footer {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    padding-bottom: 40px;
+    letter-spacing: 0.1em;
+  }
+
+  /* visited pill note */
+  .visited-pill-note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: var(--col-v-bg);
+    border: 1px solid var(--col-v-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+  .visited-pill-note strong { color: var(--col-v); }
+
+  /* broken badge on no-lvha panel */
+  .broken-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: var(--col-a-bg);
+    color: var(--col-a);
+    border: 1px solid var(--col-a-border);
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+    vertical-align: middle;
+  }
+
+  .tip-box {
+    background: #fffbeb;
+    border: 2px solid #fcd34d;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 0.8rem;
+    color: #78350f;
+    line-height: 1.55;
+    margin-top: 16px;
+  }
+  .tip-box strong { color: var(--col-h); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAND -->
+<div class="top-band">
+  <div class="lvha-row">
+    <div class="lvha-badge badge-l">L<span>:link</span></div>
+    <div class="lvha-badge badge-v">V<span>:visited</span></div>
+    <div class="lvha-badge badge-h">H<span>:hover</span></div>
+    <div class="lvha-badge badge-a">A<span>:active</span></div>
+  </div>
+  <div class="top-title">Lord Vader Hates Anakin</div>
+  <div class="top-sub">CSS Pseudo-Class Order Explorer</div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- STATE CARDS -->
+  <div class="section-heading">🃏 What each pseudo-class does</div>
+  <div class="section-sub">Hover over each card to see it light up!</div>
+  <div class="state-cards">
+
+    <div class="scard scard-base">
+      <div class="scard-letter">–</div>
+      <div class="scard-pseudo">.activity { }</div>
+      <div class="scard-desc">The base style. Applies always as the foundation — other states build on top of this.</div>
+      <div class="scard-when">Always active</div>
+    </div>
+
+    <div class="scard scard-link">
+      <div class="scard-letter">L</div>
+      <div class="scard-pseudo">.activity:link</div>
+      <div class="scard-desc">Targets an <code>&lt;a href&gt;</code> that has <strong>never been visited</strong>. Fresh links the user hasn't clicked yet.</div>
+      <div class="scard-when">Has href + unvisited</div>
+    </div>
+
+    <div class="scard scard-visit">
+      <div class="scard-letter">V</div>
+      <div class="scard-pseudo">.activity:visited</div>
+      <div class="scard-desc">Fires when the browser <strong>recognizes the URL</strong> from history. Only color/background can be changed (privacy rules).</div>
+      <div class="scard-when">URL is in history</div>
+    </div>
+
+    <div class="scard scard-hover">
+      <div class="scard-letter">H</div>
+      <div class="scard-pseudo">.activity:hover</div>
+      <div class="scard-desc">Active while the <strong>mouse cursor is over</strong> the element. Works on any element — divs, buttons, images, links.</div>
+      <div class="scard-when">Mouse is over element</div>
+    </div>
+
+    <div class="scard scard-active">
+      <div class="scard-letter">A</div>
+      <div class="scard-pseudo">.activity:active</div>
+      <div class="scard-desc">Fires during the <strong>split second of clicking</strong> — from mousedown to mouseup. Also fires on keyboard press.</div>
+      <div class="scard-when">Being clicked right now</div>
+    </div>
+
+  </div>
+
+  <!-- ORDER STRIP -->
+  <div class="order-strip">
+    <span class="head">⚡ Correct order:</span>
+    <span class="order-pill op-l">:link</span>
+    <span class="op-arrow">→</span>
+    <span class="order-pill op-v">:visited</span>
+    <span class="op-arrow">→</span>
+    <span class="order-pill op-h">:hover</span>
+    <span class="op-arrow">→</span>
+    <span class="order-pill op-a">:active</span>
+  </div>
+
+  <!-- LIVE LAB -->
+  <div class="section-heading">🔬 Live Playground</div>
+  <div class="section-sub">Hover, click and hold these links — watch the detector light up below!</div>
+  <div class="live-section">
+    <div class="playground-links">
+      <a class="with-lvha" href="https://example.com" target="_blank">example.com ↗</a>
+      <a class="with-lvha" href="https://www.wikipedia.org" target="_blank">wikipedia.org ↗</a>
+      <a class="with-lvha" href="#section-compare">jump to compare ↓</a>
+      <a class="with-lvha" href="https://totally-fake-url-xyz-12345.com">unvisited link</a>
+    </div>
+    <div class="state-detector">
+      <span class="detector-label">Active state →</span>
+      <span class="det-badge" id="b-link">:link</span>
+      <span class="det-badge" id="b-visited">:visited</span>
+      <span class="det-badge" id="b-hover">:hover</span>
+      <span class="det-badge" id="b-active">:active</span>
+    </div>
+    <div class="visited-pill-note">
+      💡 <strong>:visited</strong> shows purple only if <em>you've actually visited that URL before</em>. Click a link, come back, and it'll turn purple! Browsers keep this private — JS can't read which links are visited.
+    </div>
+    <div class="tip-box" style="margin-top:12px;">
+      🛠️ <strong>Pro tip:</strong> Open DevTools (F12) → Elements tab → hover or click a link → watch the <code>:hover</code> / <code>:active</code> / <code>:visited</code> pseudo-classes appear & disappear in the Styles panel in real time!
+    </div>
+  </div>
+
+  <!-- COMPARE SECTION -->
+  <div id="section-compare" class="section-heading">⚔️ With LVHA vs Without LVHA</div>
+  <div class="section-sub">Try hovering both sides — notice anything broken on the left? That's the cascade bug LVHA prevents.</div>
+
+  <div class="compare-wrap">
+
+    <!-- WITHOUT -->
+    <div class="compare-panel">
+      <div class="compare-header header-bad">❌ Wrong order <span class="broken-tag">HOVER BROKEN ON VISITED</span></div>
+      <div class="compare-body">
+        <p>:hover is declared <em>before</em> :link and :visited. Since visited/link come after in the stylesheet, they override hover — so hovering a visited link shows no hover effect!</p>
+        <div class="demo-links">
+          <a class="no-lvha" href="https://www.google.com" target="_blank">google.com (try hovering!)</a>
+          <a class="no-lvha" href="https://totally-fake-xyz-nope.com">unvisited link (hover works)</a>
+        </div>
+        <div class="code-compare code-bad">
+<span class="c-note">/* ❌ WRONG ORDER */</span>
+<span class="c-sel">.link</span><span class="c-strike">:hover</span> { <span class="c-prop">color</span>: <span class="c-val">orange</span>; }  <span class="c-note">← 1st</span>
+<span class="c-sel">.link</span><span class="c-l">:link</span>    { <span class="c-prop">color</span>: <span class="c-val">blue</span>; }    <span class="c-note">← 2nd (overrides hover!)</span>
+<span class="c-sel">.link</span><span class="c-v">:visited</span> { <span class="c-prop">color</span>: <span class="c-val">purple</span>; }  <span class="c-note">← 3rd (overrides hover!)</span>
+<span class="c-sel">.link</span><span class="c-a">:active</span>  { <span class="c-prop">color</span>: <span class="c-val">red</span>; }     <span class="c-note">← 4th</span>
+
+<span class="c-note">
+Result: hover style is LOST on
+visited or unvisited links because
+:link and :visited declared after
+:hover win the cascade!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WITH -->
+    <div class="compare-panel">
+      <div class="compare-header header-good">✅ LVHA Order — Correct!</div>
+      <div class="compare-body">
+        <p>:link and :visited set the base state. :hover comes after, so it can override both. :active comes last to win over everything while clicking.</p>
+        <div class="demo-links">
+          <a class="with-lvha" href="https://www.google.com" target="_blank">google.com (hover works!)</a>
+          <a class="with-lvha" href="https://totally-fake-xyz-nope.com">unvisited link (hover works)</a>
+        </div>
+        <div class="code-compare code-good">
+<span class="c-note">/* ✅ LVHA — CORRECT ORDER */</span>
+<span class="c-sel">.link</span><span class="c-l">:link</span>    { <span class="c-prop">color</span>: <span class="c-val">blue</span>; }    <span class="c-note">← 1st</span>
+<span class="c-sel">.link</span><span class="c-v">:visited</span> { <span class="c-prop">color</span>: <span class="c-val">purple</span>; }  <span class="c-note">← 2nd</span>
+<span class="c-sel">.link</span><span class="c-h">:hover</span>   { <span class="c-prop">color</span>: <span class="c-val">orange</span>; }  <span class="c-note">← 3rd (overrides L+V ✓)</span>
+<span class="c-sel">.link</span><span class="c-a">:active</span>  { <span class="c-prop">color</span>: <span class="c-val">red</span>; }     <span class="c-note">← 4th (overrides H ✓)</span>
+
+<span class="c-note">
+Result: hover ALWAYS works whether
+the link is visited or not. Active
+always fires on click. Every state
+wins at the right moment!</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    — L · V · H · A — Lord Vader Hates Anakin — Remember the order, feel the Force —
+  </footer>
+
+</div>
+
+<script>
+  const badges = {
+    link:    document.getElementById('b-link'),
+    visited: document.getElementById('b-visited'),
+    hover:   document.getElementById('b-hover'),
+    active:  document.getElementById('b-active'),
+  };
+
+  function clear() {
+    Object.values(badges).forEach(b => b.className = 'det-badge');
+  }
+
+  document.querySelectorAll('a.with-lvha').forEach(link => {
+    link.addEventListener('mouseenter', () => { clear(); badges.hover.classList.add('lit-h'); });
+    link.addEventListener('mouseleave', () => { clear(); });
+    link.addEventListener('mousedown',  () => { clear(); badges.active.classList.add('lit-a'); });
+    link.addEventListener('mouseup',    () => { clear(); badges.hover.classList.add('lit-h'); });
+  });
+</script>
+</body>
+</html>

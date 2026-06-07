@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CSS LVHA Playground – Cute Edition</title>
+<style>
+    body {
+        font-family: "Comic Sans MS", "Segoe UI", sans-serif;
+        background: #fff7f0;
+        color: #444;
+        padding: 40px;
+        line-height: 1.6;
+    }
+
+    h1, h2 {
+        color: #ff6b81;
+        text-shadow: 1px 1px #ffd1dc;
+    }
+
+    .section {
+        background: #ffffff;
+        border: 2px solid #ffd1dc;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
+    }
+
+    .cute-link {
+        font-size: 1.2rem;
+        padding: 8px 12px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.2s ease;
+    }
+
+    /* ---------------------------
+       LVHA STYLES (Lord Vader Hates Anakin)
+       --------------------------- */
+
+    /* :link — default unvisited link */
+    .lvha a:link {
+        color: #ff8c42;
+        background: #ffe8d6;
+    }
+
+    /* :visited — after clicking */
+    .lvha a:visited {
+        color: #8c42ff;
+        background: #e8d6ff;
+    }
+
+    /* :hover — when mouse is over */
+    .lvha a:hover {
+        color: white;
+        background: #ff6b81;
+        transform: scale(1.05);
+    }
+
+    /* :active — when clicking */
+    .lvha a:active {
+        background: #ff3b5c;
+        color: white;
+        transform: scale(0.95);
+    }
+
+    /* BUTTON LVHA */
+    .lvha button {
+        font-size: 1rem;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        background: #ffd1dc;
+        color: #444;
+        transition: 0.2s ease;
+    }
+
+    .lvha button:hover {
+        background: #ff6b81;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .lvha button:active {
+        background: #ff3b5c;
+        transform: translateY(1px);
+    }
+
+    /* Unstyled links for comparison */
+    .unstyled a {
+        color: blue;
+    }
+</style>
+</head>
+<body>
+
+<h1>🌈 CSS LVHA Playground</h1>
+<p>Explore how <strong>link → visited → hover → active</strong> behave.  
+Click, hover, and inspect each element to see the differences.</p>
+
+<!-- Unstyled Section -->
+<div class="section unstyled">
+    <h2>🚫 No LVHA Styling (Default Browser Behavior)</h2>
+    <p>These links use <strong>no custom CSS</strong>. This is your baseline.</p>
+    <a href="https://example.com" target="_blank">Default Link 1</a><br>
+    <a href="https://openai.com" target="_blank">Default Link 2</a><br>
+    <a href="https://microsoft.com" target="_blank">Default Link 3</a>
+</div>
+
+<!-- LVHA Styled Section -->
+<div class="section lvha">
+    <h2>✨ LVHA Styled Links</h2>
+    <p>These links use the full LVHA chain. Try clicking, hovering, and holding down the mouse.</p>
+
+    <a class="cute-link" href="https://example.com" target="_blank">LVHA Link 1</a><br><br>
+    <a class="cute-link" href="https://openai.com" target="_blank">LVHA Link 2</a><br><br>
+    <a class="cute-link" href="https://microsoft.com" target="_blank">LVHA Link 3</a>
+</div>
+
+<!-- Buttons -->
+<div class="section lvha">
+    <h2>💖 LVHA Styled Buttons</h2>
+    <p>Buttons don’t have <code>:link</code> or <code>:visited</code>, but <code>:hover</code> and <code>:active</code> still apply.</p>
+
+    <button>Click Me!</button>
+    <button>Hover Me!</button>
+    <button>Press Me!</button>
+</div>
+
+<!-- Explanation -->
+<div class="section">
+    <h2>📘 Why LVHA Order Matters</h2>
+    <p>The order must always be:</p>
+    <pre style="background:#fff0f5; padding:10px; border-radius:10px;">
+a:link
+a:visited
+a:hover
+a:active
+    </pre>
+
+    <p>Because CSS reads selectors top‑to‑bottom.  
+    If <code>:hover</code> came before <code>:link</code>, the hover style might never apply.  
+    LVHA ensures predictable behavior across browsers.</p>
+</div>
+
+</body>
+</html>
+
