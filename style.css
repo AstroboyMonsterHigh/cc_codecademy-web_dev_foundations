@@ -57,5 +57,16 @@ Active
 }
 
 .activity {
-    border: 10px solid red;
+    border: 5px solid green;
+}
+
+.activity:hover {
+    color: yellow;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.activity:active {
+    color: red;
+    background-color: yellow;
 }
