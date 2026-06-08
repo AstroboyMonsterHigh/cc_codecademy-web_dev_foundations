@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS LVHA Playground</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        .section {
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .demo-box {
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 5px solid #3498db;
+            margin: 10px 0;
+        }
+
+        /* Base setup for playground to keep things clean */
+        a {
+            font-weight: bold;
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        /* --- 1. Isolated Tests --- */
+        .iso-link a:link { color: #0066cc; text-decoration: underline; }
+        .iso-visited a:visited { color: #551a8b; background-color: #f0e6ff; }
+        .iso-hover a:hover { color: #e74c3c; background-color: #fadbd8; }
+        .iso-active a:active { color: #2ecc71; background-color: #d4efdf; }
+
+        /* --- 2. Combined LVHA Correct Order --- */
+        .correct-lvha a:link    { color: #1abc9c; } /* Turquoise */
+        .correct-lvha a:visited { color: #9b59b6; } /* Purple */
+        .correct-lvha a:hover   { color: #e67e22; text-decoration: underline; } /* Orange */
+        .correct-lvha a:active  { color: #e74c3c; background: #fadbd8; } /* Red */
+
+        /* --- Live Playground Styles --- */
+        #dynamic-link {
+            font-size: 1.2rem;
+            border: 2px solid #ccc;
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>CSS LVHA Interactive Guide</h1>
+    <p>Explore how link states behave. None of these links will navigate away from this page.</p>
+
+    <hr>
+
+    <div class="section">
+        <h2>1. Base Link (No Custom Effects)</h2>
+        <p>This is how your browser handles links by default if no CSS transitions or styles are forced.</p>
+        <div class="demo-box">
+            <a href="#base" onclick="return false;">Default Browser Link</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Isolated State Tests</h2>
+        <p>Hover and click each one individually to see exactly what that specific pseudo-class targets.</p>
+        
+        <div class="demo-box iso-link">
+            <strong>Unvisited (:link Only):</strong> <a href="#link" onclick="return false;">I am styled as unvisited</a>
+        </div>
+        
+        <div class="demo-box iso-visited">
+            <strong>Visited (:visited Only):</strong> <a href="" onclick="return false;">I point to this page (already visited)</a>
+        </div>
+        
+        <div class="demo-box iso-hover">
+            <strong>Hover (:hover Only):</strong> <a href="#hover" onclick="return false;">Mouse over me</a>
+        </div>
+        
+        <div class="demo-box iso-active">
+            <strong>Active (:active Only):</strong> <a href="#active" onclick="return false;">Click and hold me</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. The LVHA Combination (Correct Cascading Order)</h2>
+        <p>When combined correctly, <code>:hover</code> overrides <code>:visited</code>, and <code>:active</code> overrides <code>:hover</code>.</p>
+        <div class="demo-box correct-lvha">
+            <a href="#combo" id="combo-link">Click, Hover, and Hold Me!</a>
+        </div>
+        <button onclick="resetComboLink()">Reset Visited State for this Link</button>
+    </div>
+
+    <div class="section">
+        <h2>4. Live Playground</h2>
+        <p>Change the CSS values below in real-time to see how it alters the live element link.</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <label><strong>:link Color:</strong></label><br>
+                <input type="color" id="input-link" value="#1abc9c" oninput="updateStyles()"><br><br>
+                
+                <label><strong>:hover Color:</strong></label><br>
+                <input type="color" id="input-hover" value="#e67e22" oninput="updateStyles()"><br><br>
+                
+                <label><strong>:active Color:</strong></label><br>
+                <input type="color" id="input-active" value="#e74c3c" oninput="updateStyles()">
+            </div>
+            
+            <div style="text-align: center; border-left: 1px solid var(--border-color); padding-left: 20px;">
+                <h3>Result Link</h3>
+                <a href="#playground" id="dynamic-link" onclick="return false;">Playground Target</a>
+                <p style="font-size: 0.85rem; color: #666; margin-top: 15px;">
+                    Test the cascade: Try hovering while holding down your click!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <style id="playground-styles">
+        /* Dynamic styles will be injected here */
+        #dynamic-link:link { color: #1abc9c; }
+        #dynamic-link:hover { color: #e67e22; }
+        #dynamic-link:active { color: #e74c3c; }
+    </style>
+
+    <script>
+        function resetComboLink() {
+            const link = document.getElementById('combo-link');
+            // Change the hash uniquely to trick the browser into treating it as unvisited
+            link.href = "#combo-" + Math.random().toString(36).substring(2, 7);
+        }
+
+        function updateStyles() {
+            const linkColor = document.getElementById('input-link').value;
+            const hoverColor = document.getElementById('input-hover').value;
+            const activeColor = document.getElementById('input-active').value;
+            
+            const styleTag = document.getElementById('playground-styles');
+            styleTag.innerHTML = `
+                #dynamic-link:link { color: ${linkColor}; }
+                #dynamic-link:hover { color: ${hoverColor}; }
+                #dynamic-link:active { color: ${activeColor}; }
+            `;
+        }
+    </script>
+</body>
+</html>

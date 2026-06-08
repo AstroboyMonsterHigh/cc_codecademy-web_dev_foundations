@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>CSS LVHA: Link Love & Hate Playground ✨</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(145deg, #f8f9ff 0%, #eef2f9 100%);
+      margin: 0;
+      padding: 2rem 1.5rem;
+      color: #1a2c3e;
+    }
+
+    /* main container */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(2px);
+      border-radius: 3rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem 2rem 2.5rem;
+      transition: all 0.2s;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin: 0 0 0.3rem 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 span {
+      background: #2d3e50;
+      color: #ffe3b0;
+      font-size: 1rem;
+      padding: 0.2rem 0.9rem;
+      border-radius: 40px;
+      letter-spacing: 1px;
+      font-weight: normal;
+    }
+
+    .sub {
+      border-left: 4px solid #f5a65b;
+      padding-left: 1rem;
+      color: #2c4c6c;
+      margin: 0.5rem 0 1.5rem 0;
+      font-weight: 500;
+    }
+
+    /* grid layout */
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 280px;
+      background: white;
+      border-radius: 2rem;
+      padding: 1.4rem 1.6rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.1s ease;
+      border: 1px solid #e9edf4;
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px dotted #cbd5e1;
+      padding-bottom: 0.5rem;
+    }
+
+    .demo-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.2rem 0 1rem;
+    }
+
+    .link-row {
+      padding: 0.5rem 0;
+      border-radius: 1rem;
+      transition: background 0.1s;
+    }
+
+    /* base link styles — no effects (just default except we remove default underline decoration for consistency) */
+    /* but we want plain links visible: keep default blue, but underline for clarity, no extra effects */
+    a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* special class for plain section */
+    .plain-link a {
+      text-decoration: underline;
+      color: #0645ad;
+      background: transparent;
+      font-weight: normal;
+    }
+    .plain-link a:visited {
+      color: #551a8b;
+    }
+    .plain-link a:hover {
+      /* no extra effect, just default browser hover? but we reset */
+      text-decoration: underline;
+      background: none;
+      color: #0645ad;
+    }
+    .plain-link a:active {
+      color: #f00;
+    }
+    .plain-link a:focus {
+      outline: thin dotted;
+    }
+
+    /* ---------- ISOLATED EFFECTS (each rule set separately) ---------- */
+    /* :link effect (unvisited only) */
+    .demo-link:link {
+      /* default blue-ish */
+    }
+    .effect-link-only a:link {
+      color: #1e6f3f;
+      text-decoration: underline wavy #2b8c5e;
+      font-weight: 500;
+    }
+
+    /* :visited effect only */
+    .effect-visited-only a:visited {
+      color: #8b5e3c;
+      text-decoration: overline dotted #c2874b;
+      background: #fff5e8;
+    }
+
+    /* :hover effect only */
+    .effect-hover-only a:hover {
+      color: #c43a1b;
+      background: #fff0e7;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 0 4px;
+      transform: scale(1.02);
+      display: inline-block;
+      transition: 0.05s linear;
+    }
+
+    /* :active effect only */
+    .effect-active-only a:active {
+      color: #b8226b;
+      background: #ffe4f0;
+      font-style: italic;
+      text-decoration: line-through;
+    }
+
+    /* ---------- COMBINATION (proper LVHA order) ---------- */
+    .combo-lvha a:link {
+      color: #2c7da0;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 2px solid #a9d6e5;
+    }
+    .combo-lvha a:visited {
+      color: #6b4e71;
+      border-bottom: 2px solid #cdb4db;
+    }
+    .combo-lvha a:hover {
+      color: #ff914d;
+      background: #fff2e5;
+      border-bottom: 2px solid #ff914d;
+      border-radius: 8px;
+      padding: 0.2rem 0.4rem;
+      transition: 0.08s linear;
+    }
+    .combo-lvha a:active {
+      color: #d62828;
+      background: #ffe5e5;
+      border-bottom: 2px solid #d62828;
+      transform: translateY(1px);
+    }
+
+    /* playground special interactive zone */
+    .playground {
+      background: #1e2f3c;
+      color: #f0f3f8;
+      border-radius: 2rem;
+      padding: 1.6rem;
+      margin-top: 1rem;
+    }
+    .playground h3 {
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+    }
+    .playground-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+      align-items: center;
+    }
+    .pill-btn {
+      background: #2f455b;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 60px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.1s;
+      font-size: 0.85rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .pill-btn.active {
+      background: #f5a65b;
+      color: #1e2f3c;
+      box-shadow: 0 0 0 2px white, 0 0 0 4px #f5a65b;
+    }
+    .pill-btn.reset-btn {
+      background: #5f7f9e;
+    }
+    .live-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+      justify-content: space-evenly;
+      background: #0f212e;
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+    }
+    .play-link {
+      font-size: 1.2rem;
+      padding: 0.6rem 1rem;
+      background: #2a3e4b;
+      border-radius: 60px;
+      transition: all 0.07s linear;
+      display: inline-block;
+      text-align: center;
+      min-width: 150px;
+    }
+    /* base playground style & dynamic classes injected by js */
+    .play-link {
+      text-decoration: none;
+      color: #cae9ff;
+      font-weight: 500;
+      transition: all 0.07s linear;
+    }
+    /* Dynamic LVHA classes will be added by script */
+    .demo-live .play-link:link {
+      color: #7bc5ae;
+    }
+    .demo-live .play-link:visited {
+      color: #bc9ad9;
+    }
+    .demo-live .play-link:hover {
+      color: #ffb347;
+      background: #3e5a6b;
+      transform: scale(1.02);
+    }
+    .demo-live .play-link:active {
+      color: #ff6f61;
+      background: #5f3b46;
+    }
+
+    /* style toggles description */
+    .info-note {
+      background: #fef6e0;
+      border-radius: 1.2rem;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.85rem;
+      margin: 1rem 0 0;
+      color: #785b2c;
+      border-left: 5px solid #f3b33d;
+    }
+    hr {
+      margin: 1.2rem 0;
+      border: 0;
+      height: 2px;
+      background: linear-gradient(to right, #cbdbe6, transparent);
+    }
+    footer {
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 2rem;
+      opacity: 0.7;
+    }
+    button {
+      font-family: inherit;
+    }
+    code {
+      background: #eef2fa;
+      padding: 0.2rem 0.4rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 780px) {
+      body { padding: 1rem; }
+      .container { padding: 1rem; }
+      .play-link { font-size: 1rem; min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>
+    🧪 CSS LVHA: <span>LoVe / HAte</span>
+    <span style="font-size: 1rem;">Lord Vader ❤️‍🔥 Anakin</span>
+  </h1>
+  <div class="sub">
+    ✨ Understand link pseudo‑classes order: <strong>:link · :visited · :hover · :active</strong><br>
+    Test each effect separately, see combinations, and live‑edit with the interactive playground ⚡
+  </div>
+
+  <div class="grid">
+    <!-- Section 1: Basic links (no extra effects) -->
+    <div class="card plain-link">
+      <h2>📄 ① Plain links <span style="font-size:0.8rem;">(default styles)</span></h2>
+      <div class="demo-links">
+        <div class="link-row"><a href="#" data-prevent="true">🔗 Unvisited demo link</a> <span style="font-size:0.8rem;">(fresh)</span></div>
+        <div class="link-row"><a href="#visited-dummy" data-prevent="true" class="visited-sample">📘 Visited-style link</a> <span style="font-size:0.8rem;">(click once to mark visited)</span></div>
+        <div class="link-row"><a href="#" data-prevent="true">✨ Hover & active — no custom CSS</a></div>
+      </div>
+      <div class="info-note">
+        💡 No extra effects: only browser defaults (blue / purple, underline). All links <strong>stay on this page</strong> (no new tabs).
+      </div>
+    </div>
+
+    <!-- Section 2: Isolated effects each on its own -->
+    <div class="card">
+      <h2>🎯 ② Isolated effects</h2>
+      <div class="effect-link-only">
+        <div class="link-row"><a href="#" data-prevent="true">🎨 :link only — fresh links get green wavy</a></div>
+      </div>
+      <div class="effect-visited-only">
+        <div class="link-row"><a href="#visit-me" data-prevent="true" class="make-visit">💜 :visited only — brown overline (click me!)</a></div>
+      </div>
+      <div class="effect-hover-only">
+        <div class="link-row"><a href="#" data-prevent="true">🖱️ :hover only — orange bg + no underline on hover</a></div>
+      </div>
+      <div class="effect-active-only">
+        <div class="link-row"><a href="#" data-prevent="true">⚡ :active only — pink bg + line-through while clicking</a></div>
+      </div>
+      <div class="info-note">
+        ✅ Each link demonstrates <strong>only one</strong> pseudo-class effect. No interference.
+      </div>
+    </div>
+
+    <!-- Section 3: Combination with proper LVHA order -->
+    <div class="card combo-lvha">
+      <h2>🎨 ③ LVHA Combo <span style="font-size:0.7rem;">(full experience)</span></h2>
+      <div class="demo-links">
+        <div class="link-row"><a href="#" data-prevent="true">🌟 Fresh link — blue border + bold</a></div>
+        <div class="link-row"><a href="#combo-visited" data-prevent="true" class="combo-visit">🌸 Visited combo — purple border</a></div>
+        <div class="link-row"><a href="#" data-prevent="true">🔥 Hover — orange glow + background</a></div>
+        <div class="link-row"><a href="#" data-prevent="true">💥 Active — red background, press down effect</a></div>
+      </div>
+      <div class="info-note">
+        🧠 <strong>LVHA order:</strong> <code>:link</code> → <code>:visited</code> → <code>:hover</code> → <code>:active</code>. Hover over visited links works, active always wins last.
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE PLAYGROUND SECTION: dynamic + interactive toggles -->
+  <div class="playground">
+    <h3>🎮 Live playground — test & mix LVHA rules yourself!</h3>
+    <div class="playground-controls">
+      <button class="pill-btn" data-toggle="link">💚 :link effect</button>
+      <button class="pill-btn" data-toggle="visited">💜 :visited effect</button>
+      <button class="pill-btn" data-toggle="hover">🧡 :hover effect</button>
+      <button class="pill-btn" data-toggle="active">❤️ :active effect</button>
+      <button class="pill-btn reset-btn" id="resetPlayground">⟳ Reset all (plain links)</button>
+    </div>
+    <div class="live-links" id="livePlayArea">
+      <a href="#" class="play-link" data-prevent="true">✨ Unvisited star</a>
+      <a href="#play-visited" class="play-link visit-play" data-prevent="true">🌙 Click to visit</a>
+      <a href="#" class="play-link" data-prevent="true">🐉 Hover & play</a>
+      <a href="#" class="play-link" data-prevent="true">⚡ Active test</a>
+    </div>
+    <div class="info-note" style="background:#2a3b44; color:#e4eef5; border-left-color:#f5a65b; margin-top:1.2rem;">
+      🧪 <strong>Interactive experiment:</strong> Toggle each pseudo‑class ON/OFF. The playground combines active rules <strong>dynamically</strong> using proper LVHA order!<br>
+      💡 Tip: Click the "visited" link once to turn it purple/visited state, then test hover + active combos.
+    </div>
+  </div>
+  <footer>
+    ⚡ All links use <code>href="#"</code> & <code>preventDefault</code> — no page reload, no new tab. Perfect for safe testing.<br>
+    🧙 "Lord Vader hates when you forget :hover after :visited" — remember LVHA order!
+  </footer>
+</div>
+
+<script>
+  (function() {
+    // --- Helper: prevent all links from navigating / opening new tabs ---
+    function preventAllNav() {
+      document.querySelectorAll('a[data-prevent="true"], a:not([data-prevent])').forEach(link => {
+        // we attach listener but avoid duplicates
+        if (link.getAttribute('data-listener') === 'true') return;
+        link.addEventListener('click', function(e) {
+          // only prevent if it's a dummy anchor or internal fragment we don't want to jump
+          const href = this.getAttribute('href');
+          if (!href || href === '#' || href.startsWith('#') || this.hasAttribute('data-prevent')) {
+            e.preventDefault();
+          }
+          // mark visited state manually for specific links that need to show visited pseudo-class
+          // For proper demo, we can mark visited by adding a class? but :visited is based on real history.
+          // However to demonstrate visited effect easily, we programmatically add a data-visited or change href? 
+          // Real :visited pseudo-class only applies if the link's href points to a URL that exists in browser history.
+          // So we will simulate visited by creating a unique hash and pushing state.
+          if (this.classList && (this.classList.contains('visited-sample') || this.classList.contains('make-visit') || 
+              this.classList.contains('combo-visit') || this.classList.contains('visit-play'))) {
+            // change href to a unique dummy and then pushState to make it 'visited'
+            const dummyUrl = '#' + Date.now() + '-' + Math.random();
+            this.setAttribute('href', dummyUrl);
+            // push state to history so browser marks as visited
+            history.pushState({}, '', dummyUrl);
+            // after short delay we could keep same link text but it's fine. also prevents jumping
+            e.preventDefault();
+            // optional: update text feedback
+            const originalText = this.innerText;
+            this.innerText = originalText + ' ✓';
+            setTimeout(() => { if(this.innerText.endsWith(' ✓')) this.innerText = originalText; }, 800);
+          } else {
+            e.preventDefault();
+          }
+        });
+        link.setAttribute('data-listener', 'true');
+      });
+    }
+
+    // additional visited simulation for 'visited-sample' inside plain card and combo card.
+    function addVisitedToggle() {
+      // we handle click simulation for visited links but keep real behavior for forced visited style demonstration:
+      // All links that should demonstrate visited style get a special handler that creates a history entry.
+      const visitedTriggers = document.querySelectorAll('.visited-sample, .make-visit, .combo-visit, .visit-play');
+      visitedTriggers.forEach(link => {
+        // avoid double addition
+        if (link.getAttribute('data-visit-handler') === 'true') return;
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const fakeUrl = '#/visited-' + Date.now() + '-' + Math.random().toString(36);
+          this.setAttribute('href', fakeUrl);
+          history.pushState({}, '', fakeUrl);
+          // also trigger a little micro-feedback
+          const span = this.querySelector('.visit-feedback') || (() => { let s = document.createElement('span'); s.className='visit-feedback'; this.appendChild(s); return s; })();
+          this.style.transition = '0.1s';
+          setTimeout(() => {
+            // no extra but we can remove later
+          }, 100);
+        });
+        link.setAttribute('data-visit-handler', 'true');
+      });
+    }
+
+    // Run initial prevention
+    preventAllNav();
+    addVisitedToggle();
+
+    // --- DYNAMIC PLAYGROUND: toggling LVHA rules via CSS class injection ---
+    const playgroundContainer = document.getElementById('livePlayArea');
+    const playLinks = document.querySelectorAll('#livePlayArea .play-link');
+    
+    // we'll manage state of which effects are active
+    let activeEffects = {
+      link: false,
+      visited: false,
+      hover: false,
+      active: false
+    };
+    
+    // function to update the styles on the playground container
+    function updatePlaygroundStyles() {
+      // remove any existing dynamic LVHA classes from parent container
+      playgroundContainer.classList.remove('pg-link', 'pg-visited', 'pg-hover', 'pg-active', 'pg-combined');
+      let classesToAdd = [];
+      if (activeEffects.link) classesToAdd.push('pg-link');
+      if (activeEffects.visited) classesToAdd.push('pg-visited');
+      if (activeEffects.hover) classesToAdd.push('pg-hover');
+      if (activeEffects.active) classesToAdd.push('pg-active');
+      
+      // Add combined class if any active for easier management of order
+      playgroundContainer.classList.add(...classesToAdd);
+      // also attach a style tag dynamically? better to use internal style rules defined with proper cascade based on LVHA.
+      // To ensure order: :link, :visited, :hover, :active, we'll define css rules inside head and overwrite? We'll create style block dynamic
+      // but we will define all rules in a <style id="playground-dynamic"> and rewrite.
+      let styleEl = document.getElementById('playground-dynamic-styles');
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'playground-dynamic-styles';
+        document.head.appendChild(styleEl);
+      }
+      
+      let cssRules = '';
+      // We define all playground link styles based on activeEffects following LVHA cascade order.
+      // Base style (default light)
+      cssRules += `#livePlayArea .play-link { text-decoration: none; transition: all 0.07s linear; display: inline-block; }\n`;
+      
+      if (activeEffects.link) {
+        cssRules += `#livePlayArea.pg-link .play-link:link { color: #5bc0be; text-decoration: underline wavy #8dd0cf; font-weight: bold; text-shadow: 0 0 2px rgba(0,0,0,0.2); }\n`;
+      } else {
+        cssRules += `#livePlayArea .play-link:link { color: #cae9ff; text-decoration: none; }\n`;
+      }
+      
+      if (activeEffects.visited) {
+        cssRules += `#livePlayArea.pg-visited .play-link:visited { color: #e7b2a5; text-decoration: line-through dotted #f4acb7; background: #441c2c; border-radius: 20px; padding: 0.2rem 0.8rem; }\n`;
+      } else {
+        cssRules += `#livePlayArea .play-link:visited { color: #bc9ad9; text-decoration: none; background: transparent; }\n`;
+      }
+      
+      if (activeEffects.hover) {
+        cssRules += `#livePlayArea.pg-hover .play-link:hover { color: #ffcf4a !important; background: #3b5c6e; transform: scale(1.03); border-radius: 36px; padding-left: 1rem; padding-right: 1rem; transition: 0.06s; }\n`;
+      } else {
+        cssRules += `#livePlayArea .play-link:hover { color: #ffb347; background: #3e5a6b; transform: scale(1.02); } /* default micro effect */\n`;
+      }
+      
+      if (activeEffects.active) {
+        cssRules += `#livePlayArea.pg-active .play-link:active { color: #ff8866; background: #691c34; transform: translateY(2px); letter-spacing: 1px; }\n`;
+      } else {
+        cssRules += `#livePlayArea .play-link:active { color: #ff6f61; background: #5f3b46; }\n`;
+      }
+      
+      // Additional reset for visited custom but overall
+      styleEl.textContent = cssRules;
+      
+      // toggle active button styles
+      document.querySelectorAll('.pill-btn[data-toggle]').forEach(btn => {
+        const effect = btn.getAttribute('data-toggle');
+        if (activeEffects[effect]) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+    
+    // attach toggle buttons
+    const toggleButtons = document.querySelectorAll('.pill-btn[data-toggle]');
+    toggleButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const effect = btn.getAttribute('data-toggle');
+        if (effect === 'link' || effect === 'visited' || effect === 'hover' || effect === 'active') {
+          activeEffects[effect] = !activeEffects[effect];
+          updatePlaygroundStyles();
+        }
+      });
+    });
+    
+    // reset button
+    const resetBtn = document.getElementById('resetPlayground');
+    resetBtn.addEventListener('click', () => {
+      activeEffects = { link: false, visited: false, hover: false, active: false };
+      updatePlaygroundStyles();
+      // also optional reset any pushed state of visited inside playground? but visited state is browser persistent.
+      // we notify user:
+      const infoBox = document.querySelector('.playground .info-note:last-of-type');
+      // soft feedback
+      resetBtn.innerText = '✓ Reset!';
+      setTimeout(() => { resetBtn.innerText = '⟳ Reset all (plain links)'; }, 1000);
+    });
+    
+    // additional ensure that all links in playground also do not navigate and have visited simulation for the second link
+    const playgroundVisitLink = document.querySelector('#livePlayArea .visit-play');
+    if (playgroundVisitLink) {
+      playgroundVisitLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const fakeVisit = '#pg-visited-' + Date.now();
+        this.setAttribute('href', fakeVisit);
+        history.pushState({}, '', fakeVisit);
+        // brief message
+        const tempSpan = document.createElement('span');
+        tempSpan.textContent = ' 🟣 visited!';
+        tempSpan.style.fontSize = '0.7rem';
+        this.appendChild(tempSpan);
+        setTimeout(() => { tempSpan.remove(); }, 700);
+      });
+    }
+    
+    // run initial style
+    updatePlaygroundStyles();
+    
+    // also add extra global visited simulation for any new elements? re-run after any dynamic changes (none complex)
+    setInterval(() => {
+      // ensure all a elements get preventDefault if missing just for safety
+      document.querySelectorAll('a').forEach(link => {
+        if (link.getAttribute('data-listener') !== 'true' && (!link.href || link.href === '#' || link.getAttribute('href')?.startsWith('#'))) {
+          link.addEventListener('click', (e) => e.preventDefault());
+          link.setAttribute('data-listener', 'true');
+        }
+      });
+    }, 500);
+  })();
+</script>
+</body>
+</html>

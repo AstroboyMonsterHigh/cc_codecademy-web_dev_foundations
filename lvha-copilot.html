@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CSS LVHA Playground 🌈</title>
+  <style>
+    /* ------------------------------
+       Global styles
+    --------------------------------*/
+    :root {
+      --bg: #fdf6ff;
+      --card: #ffffff;
+      --border: #e3d5ff;
+      --text: #333;
+      --accent: #a855f7;
+      --accent-soft: #f3e8ff;
+      --hover: #f97316;
+      --active: #ec4899;
+      --visited: #6366f1;
+      --code-bg: #111827;
+      --code-text: #e5e7eb;
+      --mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --rounded: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #fce7f3 0, var(--bg) 40%, #e0f2fe 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    h1, h2, h3 {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    h1 span.badge {
+      font-size: 0.9rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    p.lead {
+      margin-top: 0.25rem;
+      color: #4b5563;
+    }
+
+    section {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: var(--rounded);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.1rem 0.6rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--rounded);
+      border: 1px solid var(--border);
+      padding: 1rem;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-top: 0.4rem;
+    }
+
+    .code {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 8px;
+      padding: 0.75rem 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin-top: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .code strong {
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      background: #e5e7eb;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      color: #111827;
+    }
+
+    /* ------------------------------
+       IMPORTANT: LVHA ORDER
+       a:link → a:visited → a:hover → a:active
+    --------------------------------*/
+    .demo-links a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease, transform 0.05s ease;
+      padding: 0.1rem 0.25rem;
+      border-radius: 6px;
+    }
+
+    /* 1. LINK (default, not visited yet) */
+    .demo-links a:link {
+      color: var(--accent);
+    }
+
+    /* 2. VISITED */
+    .demo-links a:visited {
+      color: var(--visited);
+    }
+
+    /* 3. HOVER */
+    .demo-links a:hover {
+      color: var(--hover);
+      background: #fff7ed;
+    }
+
+    /* 4. ACTIVE (while clicking) */
+    .demo-links a:active {
+      color: var(--active);
+      background: #fdf2f8;
+      transform: translateY(1px);
+    }
+
+    /* Isolated states (for teaching) */
+    .only-link a:link {
+      color: var(--accent);
+    }
+
+    .only-visited a:visited {
+      color: var(--visited);
+    }
+
+    .only-hover a:hover {
+      color: var(--hover);
+      background: #fff7ed;
+    }
+
+    .only-active a:active {
+      color: var(--active);
+      background: #fdf2f8;
+    }
+
+    /* Combination example: underline animation + color changes */
+    .combo a {
+      position: relative;
+      text-decoration: none;
+      color: var(--accent);
+    }
+
+    .combo a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, #f97316, #ec4899, #6366f1);
+      transition: width 0.2s ease;
+    }
+
+    .combo a:link {
+      color: var(--accent);
+    }
+
+    .combo a:visited {
+      color: var(--visited);
+    }
+
+    .combo a:hover {
+      color: var(--hover);
+    }
+
+    .combo a:hover::after {
+      width: 100%;
+    }
+
+    .combo a:active {
+      color: var(--active);
+      transform: translateY(1px);
+    }
+
+    /* Playground styles */
+    .playground-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 800px) {
+      .playground-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .playground-preview {
+      border-radius: var(--rounded);
+      border: 1px dashed var(--border);
+      padding: 1rem;
+      background: #f9fafb;
+      min-height: 120px;
+    }
+
+    .playground-preview a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      padding: 0.1rem 0.25rem;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .playground-controls label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+
+    .playground-controls select,
+    .playground-controls input[type="color"] {
+      width: 100%;
+      padding: 0.35rem 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      background: #f9fafb;
+    }
+
+    .playground-controls small {
+      display: block;
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+    }
+
+    .playground-controls .row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+
+    .badge-inline {
+      font-size: 0.8rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4f46e5;
+      margin-left: 0.25rem;
+    }
+
+    .tiny {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .emoji-bullet {
+      margin-right: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>CSS LVHA Playground 🌈 <span class="badge">Lord Vader Hates Anakin</span></h1>
+      <p class="lead">
+        A cute, beginner‑friendly space to play with link states:
+        <strong>L</strong>ink → <strong>V</strong>isited → <strong>H</strong>over → <strong>A</strong>ctive.
+      </p>
+      <p class="tiny">
+        All links are “fake” and won’t open real pages. They either use <code>href="#!"</code> or cancel the click.
+      </p>
+    </header>
+
+    <!-- 1. Basic links (no special effects) -->
+    <section>
+      <h2 class="section-title">1. Basic links (no extra effects) 🧸</h2>
+      <p>
+        These are plain links with almost no styling. This is close to the browser default.
+      </p>
+
+      <div class="card">
+        <h3>Example links</h3>
+        <p>
+          <span class="emoji-bullet">⭐</span>
+          <a href="#!" onclick="return false;">Simple link</a><br />
+          <span class="emoji-bullet">⭐</span>
+          <a href="#!" onclick="return false;">Another link</a><br />
+          <span class="emoji-bullet">⭐</span>
+          <a href="#!" onclick="return false;">Yet another link</a>
+        </p>
+        <p class="note">
+          Try hovering and clicking. Right now, the browser decides most of the look.
+        </p>
+      </div>
+
+      <div class="code">
+        <!-- This is just to show the idea, not the full page CSS -->
+        <strong>HTML</strong><br />
+        &lt;a href="#!"&gt;Simple link&lt;/a&gt;<br /><br />
+        <strong>CSS</strong><br />
+        a {<br />
+        &nbsp;&nbsp;color: blue;<br />
+        &nbsp;&nbsp;text-decoration: underline;<br />
+        }
+      </div>
+    </section>
+
+    <!-- 2. LVHA order explanation -->
+    <section>
+      <h2 class="section-title">2. The LVHA order 📚</h2>
+      <p>
+        When you style links, the order of the pseudo‑classes matters. The classic rule is:
+        <span class="badge-inline">a:link → a:visited → a:hover → a:active</span>
+      </p>
+      <p class="tiny">
+        If you put them in a different order, some rules can “override” others in ways that feel broken.
+      </p>
+
+      <div class="code">
+        <strong>Correct order</strong><br />
+        a:link { /* default link style */ }<br />
+        a:visited { /* after you clicked it before */ }<br />
+        a:hover { /* when the mouse is over it */ }<br />
+        a:active { /* while you are clicking it */ }
+      </div>
+    </section>
+
+    <!-- 3. Each state on its own -->
+    <section>
+      <h2 class="section-title">3. Each state on its own 🧪</h2>
+      <p>
+        Below, each card focuses on one state. All links are inside a
+        <code>.demo-links</code> container that has LVHA styles applied.
+      </p>
+
+      <div class="grid demo-links">
+        <!-- LINK -->
+        <div class="card only-link">
+          <h3>🔹 :link <span class="tag">a:link</span></h3>
+          <p class="note">
+            The default style for links that have not been visited yet.
+          </p>
+          <p>
+            <a href="#!" onclick="return false;">Fresh link</a><br />
+            <a href="#!" onclick="return false;">Brand new link</a>
+          </p>
+        </div>
+
+        <!-- VISITED -->
+        <div class="card only-visited">
+          <h3>🟣 :visited <span class="tag">a:visited</span></h3>
+          <p class="note">
+            Style for links the browser remembers you already clicked before.
+          </p>
+          <p>
+            <a href="#visited1" onclick="return false;">Visited‑style link</a><br />
+            <a href="#visited2" onclick="return false;">Another visited‑style link</a>
+          </p>
+        </div>
+
+        <!-- HOVER -->
+        <div class="card only-hover">
+          <h3>🧡 :hover <span class="tag">a:hover</span></h3>
+          <p class="note">
+            Style when your mouse is over the link. Try moving your cursor slowly.
+          </p>
+          <p>
+            <a href="#!" onclick="return false;">Hover over me</a><br />
+            <a href="#!" onclick="return false;">And me too</a>
+          </p>
+        </div>
+
+        <!-- ACTIVE -->
+        <div class="card only-active">
+          <h3>💖 :active <span class="tag">a:active</span></h3>
+          <p class="note">
+            Style while you are actually clicking (mouse button down).
+          </p>
+          <p>
+            <a href="#!" onclick="return false;">Click and hold</a><br />
+            <a href="#!" onclick="return false;">Try pressing me</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="code">
+        <strong>CSS used for the demo links</strong><br />
+        .demo-links a {<br />
+        &nbsp;&nbsp;color: #a855f7;<br />
+        &nbsp;&nbsp;text-decoration: underline;<br />
+        &nbsp;&nbsp;text-decoration-thickness: 2px;<br />
+        &nbsp;&nbsp;text-underline-offset: 3px;<br />
+        }<br /><br />
+        .demo-links a:link { color: #a855f7; }<br />
+        .demo-links a:visited { color: #6366f1; }<br />
+        .demo-links a:hover { color: #f97316; background: #fff7ed; }<br />
+        .demo-links a:active { color: #ec4899; background: #fdf2f8; }
+      </div>
+    </section>
+
+    <!-- 4. Combination example -->
+    <section>
+      <h2 class="section-title">4. Combination example ✨</h2>
+      <p>
+        Now we combine LVHA with a tiny underline animation and color changes.
+      </p>
+
+      <div class="card combo demo-links">
+        <h3>🌈 Fancy LVHA link</h3>
+        <p>
+          <a href="#!" onclick="return false;">Hover and click this magical link</a>
+        </p>
+        <p class="note">
+          Watch how the color changes for each state, and how the gradient underline grows on hover.
+        </p>
+      </div>
+
+      <div class="code">
+        <strong>Key idea</strong><br />
+        .combo a { position: relative; text-decoration: none; }<br />
+        .combo a::after {<br />
+        &nbsp;&nbsp;content: "";<br />
+        &nbsp;&nbsp;position: absolute;<br />
+        &nbsp;&nbsp;left: 0; bottom: -2px;<br />
+        &nbsp;&nbsp;width: 0%; height: 2px;<br />
+        &nbsp;&nbsp;background: linear-gradient(90deg, #f97316, #ec4899, #6366f1);<br />
+        &nbsp;&nbsp;transition: width 0.2s ease;<br />
+        }<br /><br />
+        .combo a:hover::after { width: 100%; }
+      </div>
+    </section>
+
+    <!-- 5. Live playground -->
+    <section>
+      <h2 class="section-title">5. Live playground 🎮</h2>
+      <p>
+        Use this mini‑playground to tweak colors for each state and see the result instantly.
+      </p>
+
+      <div class="playground-layout">
+        <!-- Preview -->
+        <div class="playground-preview" id="preview">
+          <p>
+            <span class="emoji-bullet">🎯</span>
+            <a href="#!" id="play-link" onclick="return false;">Playground link (try hover &amp; click)</a>
+          </p>
+          <p class="tiny">
+            Tip: change the colors on the right, then move your mouse over the link and click it.
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="card playground-controls">
+          <h3>🎛 Controls</h3>
+          <label for="preset">Preset</label>
+          <select id="preset">
+            <option value="cute">Cute pastel</option>
+            <option value="space">Space neon</option>
+            <option value="fire">Fire &amp; candy</option>
+          </select>
+
+          <small>You can also fine‑tune each state color:</small>
+
+          <div class="row">
+            <div>
+              <label for="linkColor">:link color</label>
+              <input type="color" id="linkColor" value="#a855f7" />
+            </div>
+            <div>
+              <label for="visitedColor">:visited color</label>
+              <input type="color" id="visitedColor" value="#6366f1" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="hoverColor">:hover color</label>
+              <input type="color" id="hoverColor" value="#f97316" />
+            </div>
+            <div>
+              <label for="activeColor">:active color</label>
+              <input type="color" id="activeColor" value="#ec4899" />
+            </div>
+          </div>
+
+          <small>
+            The playground uses the same LVHA order:
+            <code>a:link → a:visited → a:hover → a:active</code>.
+          </small>
+        </div>
+      </div>
+
+      <div class="code">
+        <strong>How the playground works (concept)</strong><br />
+        // JavaScript updates CSS variables or inline styles<br />
+        // for a:link, a:visited, a:hover, a:active colors<br />
+        // whenever you change the color inputs or preset.
+      </div>
+    </section>
+
+    <!-- 6. Isolated tests -->
+    <section>
+      <h2 class="section-title">6. Isolated tests 🧷</h2>
+      <p>
+        Use these tiny tests to check your understanding. Try to predict what will happen before you hover/click.
+      </p>
+
+      <div class="grid demo-links">
+        <div class="card">
+          <h3>Test 1: Hover vs Active</h3>
+          <p class="note">
+            Question: When you click and hold, which color wins—hover or active?
+          </p>
+          <p>
+            <a href="#!" onclick="return false;">Click and hold me</a>
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Test 2: Visited memory</h3>
+          <p class="note">
+            Question: Does this link look different after you “visit” it once?
+          </p>
+          <p>
+            <a href="#test-visited" onclick="return false;">Fake visited test link</a>
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Test 3: Order experiment</h3>
+          <p class="note">
+            Try changing the order in the CSS later and see what breaks.
+          </p>
+          <p>
+            <a href="#!" onclick="return false;">Order‑sensitive link</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Prevent any accidental navigation for all links
+    document.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", e => e.preventDefault());
+    });
+
+    // Playground logic
+    const playLink = document.getElementById("play-link");
+    const presetSelect = document.getElementById("preset");
+    const linkColorInput = document.getElementById("linkColor");
+    const visitedColorInput = document.getElementById("visitedColor");
+    const hoverColorInput = document.getElementById("hoverColor");
+    const activeColorInput = document.getElementById("activeColor");
+
+    // We’ll apply styles directly to the link using a tiny stylesheet
+    const styleEl = document.createElement("style");
+    document.head.appendChild(styleEl);
+
+    function updatePlaygroundStyles() {
+      const linkColor = linkColorInput.value;
+      const visitedColor = visitedColorInput.value;
+      const hoverColor = hoverColorInput.value;
+      const activeColor = activeColorInput.value;
+
+      styleEl.textContent = `
+        #play-link:link { color: ${linkColor}; }
+        #play-link:visited { color: ${visitedColor}; }
+        #play-link:hover {
+          color: ${hoverColor};
+          background: rgba(0,0,0,0.03);
+        }
+        #play-link:active {
+          color: ${activeColor};
+          background: rgba(0,0,0,0.06);
+          transform: translateY(1px);
+        }
+      `;
+    }
+
+    function applyPreset(name) {
+      if (name === "cute") {
+        linkColorInput.value = "#a855f7";
+        visitedColorInput.value = "#6366f1";
+        hoverColorInput.value = "#f97316";
+        activeColorInput.value = "#ec4899";
+      } else if (name === "space") {
+        linkColorInput.value = "#38bdf8";
+        visitedColorInput.value = "#a855f7";
+        hoverColorInput.value = "#22c55e";
+        activeColorInput.value = "#f97316";
+      } else if (name === "fire") {
+        linkColorInput.value = "#f97316";
+        visitedColorInput.value = "#b91c1c";
+        hoverColorInput.value = "#ea580c";
+        activeColorInput.value = "#facc15";
+      }
+      updatePlaygroundStyles();
+    }
+
+    presetSelect.addEventListener("change", () => {
+      applyPreset(presetSelect.value);
+    });
+
+    [linkColorInput, visitedColorInput, hoverColorInput, activeColorInput].forEach(input => {
+      input.addEventListener("input", updatePlaygroundStyles);
+    });
+
+    // Initialize
+    applyPreset("cute");
+  </script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS LVHA Playground</title>
+
+<style>
+:root{
+    --link-color:#2563eb;
+    --visited-color:#8b5cf6;
+    --hover-color:#ef4444;
+    --active-color:#16a34a;
+
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --border:#dbe4ee;
+    --text:#1e293b;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:30px;
+    font-family:system-ui, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+}
+
+h1,h2,h3{
+    margin-top:0;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.hero{
+    background:linear-gradient(135deg,#dbeafe,#ede9fe);
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:24px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px;
+}
+
+.demo-area{
+    margin-top:12px;
+    padding:16px;
+    border-radius:12px;
+    background:#f8fafc;
+    border:1px dashed #cbd5e1;
+}
+
+a{
+    font-weight:600;
+}
+
+/* -----------------------
+   Combined LVHA Example
+------------------------ */
+
+.lvha-demo:link{
+    color:var(--link-color);
+}
+
+.lvha-demo:visited{
+    color:var(--visited-color);
+}
+
+.lvha-demo:hover{
+    color:var(--hover-color);
+}
+
+.lvha-demo:active{
+    color:var(--active-color);
+}
+
+/* -----------------------
+   Isolated Demonstrations
+------------------------ */
+
+/* Link only */
+.link-only{
+    color:var(--link-color);
+    text-decoration:none;
+}
+
+/* Hover only */
+.hover-only{
+    color:#334155;
+    text-decoration:none;
+}
+
+.hover-only:hover{
+    color:var(--hover-color);
+    text-decoration:underline;
+}
+
+/* Active only */
+.active-only{
+    color:#334155;
+    text-decoration:none;
+}
+
+.active-only:active{
+    color:var(--active-color);
+    font-size:1.1em;
+}
+
+/* Simulated visited */
+.fake-link{
+    cursor:pointer;
+    user-select:none;
+    color:var(--link-color);
+    text-decoration:underline;
+    font-weight:600;
+}
+
+.fake-link.visited{
+    color:var(--visited-color);
+}
+
+.note{
+    background:#fff7ed;
+    border-left:5px solid #f59e0b;
+    padding:10px;
+    border-radius:8px;
+}
+
+.controls{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;
+}
+
+.control{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+input[type=color]{
+    width:100%;
+    height:42px;
+    border:none;
+    cursor:pointer;
+}
+
+.playground-link{
+    font-size:1.2rem;
+}
+
+.code{
+    background:#0f172a;
+    color:#e2e8f0;
+    padding:12px;
+    border-radius:10px;
+    overflow:auto;
+    font-family:Consolas, monospace;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:999px;
+    background:#e0e7ff;
+    margin-right:6px;
+    margin-bottom:6px;
+    font-size:.9rem;
+}
+
+button{
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    background:#2563eb;
+    color:white;
+}
+
+button:hover{
+    opacity:.9;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="hero">
+        <h1>🌟 CSS LVHA Playground</h1>
+
+        <p>
+            Remember the order:
+        </p>
+
+        <div>
+            <span class="badge">L = :link</span>
+            <span class="badge">V = :visited</span>
+            <span class="badge">H = :hover</span>
+            <span class="badge">A = :active</span>
+        </div>
+
+        <p>
+            Memory trick: <strong>"Lord Vader Hates Anakin"</strong>
+        </p>
+
+        <p>
+            CSS often defines link states in this order so the styles work as expected.
+        </p>
+    </div>
+
+    <!-- Basic -->
+    <div class="card">
+        <h2>1. Basic Link (No Special Effects)</h2>
+
+        <p>
+            This is just a normal link style.
+        </p>
+
+        <div class="demo-area">
+            <a href="#" onclick="return false;">
+                Basic Link
+            </a>
+        </div>
+    </div>
+
+    <!-- Isolated Tests -->
+    <div class="card">
+        <h2>2. Isolated Tests</h2>
+
+        <div class="grid">
+
+            <div>
+                <h3>:link</h3>
+
+                <p>
+                    The default appearance of an unvisited link.
+                </p>
+
+                <div class="demo-area">
+                    <a href="#"
+                       onclick="return false;"
+                       class="link-only">
+                        Link State
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h3>:visited (Simulated)</h3>
+
+                <p>
+                    Browsers protect real visited-link privacy,
+                    so we simulate it here.
+                </p>
+
+                <div class="demo-area">
+                    <span id="visitedDemo"
+                          class="fake-link">
+                        Click Me
+                    </span>
+
+                    <br><br>
+
+                    <button onclick="toggleVisited()">
+                        Toggle Visited
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <h3>:hover</h3>
+
+                <p>
+                    Move your mouse over the link.
+                </p>
+
+                <div class="demo-area">
+                    <a href="#"
+                       onclick="return false;"
+                       class="hover-only">
+                        Hover Over Me
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h3>:active</h3>
+
+                <p>
+                    Press and hold the mouse button.
+                </p>
+
+                <div class="demo-area">
+                    <a href="#"
+                       onclick="return false;"
+                       class="active-only">
+                        Click And Hold
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Combined -->
+    <div class="card">
+        <h2>3. Combined LVHA Example</h2>
+
+        <p>
+            Try hovering and clicking.
+        </p>
+
+        <div class="demo-area">
+            <a href="#"
+               onclick="return false;"
+               class="lvha-demo">
+                Combined LVHA Link
+            </a>
+        </div>
+
+        <div class="note" style="margin-top:16px;">
+            <strong>Typical CSS order:</strong><br>
+            :link → :visited → :hover → :active
+        </div>
+    </div>
+
+    <!-- Playground -->
+    <div class="card">
+        <h2>4. Live Playground</h2>
+
+        <p>
+            Change the colors and immediately test the link.
+        </p>
+
+        <div class="controls">
+
+            <div class="control">
+                <label>Link Color</label>
+                <input type="color"
+                       id="linkColor"
+                       value="#2563eb">
+            </div>
+
+            <div class="control">
+                <label>Visited Color</label>
+                <input type="color"
+                       id="visitedColor"
+                       value="#8b5cf6">
+            </div>
+
+            <div class="control">
+                <label>Hover Color</label>
+                <input type="color"
+                       id="hoverColor"
+                       value="#ef4444">
+            </div>
+
+            <div class="control">
+                <label>Active Color</label>
+                <input type="color"
+                       id="activeColor"
+                       value="#16a34a">
+            </div>
+
+        </div>
+
+        <div class="demo-area" style="margin-top:20px;">
+            <a href="#"
+               onclick="return false;"
+               class="lvha-demo playground-link">
+                Playground Link
+            </a>
+        </div>
+    </div>
+
+    <!-- CSS Example -->
+    <div class="card">
+        <h2>5. The CSS Pattern</h2>
+
+<pre class="code">a:link {
+    color: blue;
+}
+
+a:visited {
+    color: purple;
+}
+
+a:hover {
+    color: red;
+}
+
+a:active {
+    color: green;
+}</pre>
+
+        <p>
+            This is the classic LVHA ordering.
+        </p>
+    </div>
+
+</div>
+
+<script>
+function toggleVisited(){
+    document
+        .getElementById("visitedDemo")
+        .classList
+        .toggle("visited");
+}
+
+const root = document.documentElement;
+
+document.getElementById("linkColor")
+    .addEventListener("input", e => {
+        root.style.setProperty(
+            "--link-color",
+            e.target.value
+        );
+    });
+
+document.getElementById("visitedColor")
+    .addEventListener("input", e => {
+        root.style.setProperty(
+            "--visited-color",
+            e.target.value
+        );
+    });
+
+document.getElementById("hoverColor")
+    .addEventListener("input", e => {
+        root.style.setProperty(
+            "--hover-color",
+            e.target.value
+        );
+    });
+
+document.getElementById("activeColor")
+    .addEventListener("input", e => {
+        root.style.setProperty(
+            "--active-color",
+            e.target.value
+        );
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS LVHA Explorer 🧙‍♂️</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --surface: #1a1928;
+    --surface2: #23223a;
+    --border: #2e2d4a;
+    --text: #fffffe;
+    --muted: #a7a9be;
+    --accent-l: #e8c8ff;
+    --accent-v: #c8e8ff;
+    --accent-h: #ffd6a5;
+    --accent-a: #b5f5c8;
+    --yellow: #ffe566;
+    --pink: #ff6b9d;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --mono: 'Fira Code', monospace;
+    --sans: 'Nunito', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── Starfield background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 85%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 45%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.2) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,229,102,0.15);
+    border: 1px solid rgba(255,229,102,0.4);
+    color: var(--yellow);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 span.l { color: var(--accent-l); }
+  .hero h1 span.v { color: var(--accent-v); }
+  .hero h1 span.h { color: var(--accent-h); }
+  .hero h1 span.a { color: var(--accent-a); }
+  .hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── Nav pills ── */
+  .nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+  .nav-pills a {
+    display: inline-block;
+    padding: 6px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .nav-pills a:hover {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* ── Section ── */
+  .section {
+    margin: 2.5rem 0;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+  }
+  .section-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+  .section-header .tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 1rem;
+  }
+
+  /* ── Code blocks ── */
+  .code-block {
+    background: #0a0918;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-top: 1rem;
+  }
+  .code-block .sel { color: #ff9de2; }
+  .code-block .prop { color: #79d4fd; }
+  .code-block .val { color: #f5c842; }
+  .code-block .cmt { color: #555570; font-style: italic; }
+  .code-block .brace { color: #888; }
+
+  /* ── Explainer pills for LVHA ── */
+  .lvha-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  @media (min-width: 600px) {
+    .lvha-row { grid-template-columns: repeat(4, 1fr); }
+  }
+  .lvha-pill {
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .lvha-pill .letter {
+    font-size: 1.6rem;
+    font-weight: 800;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .lvha-pill .word {
+    font-size: 12px;
+    font-weight: 700;
+    display: block;
+    opacity: 0.85;
+    margin-bottom: 3px;
+  }
+  .lvha-pill .selector {
+    font-family: var(--mono);
+    font-size: 11px;
+    display: block;
+    opacity: 0.7;
+  }
+  .lvha-pill .trigger {
+    font-size: 11px;
+    display: block;
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+  .pill-l { background: rgba(232,200,255,0.12); border: 1px solid rgba(232,200,255,0.3); color: var(--accent-l); }
+  .pill-v { background: rgba(200,232,255,0.12); border: 1px solid rgba(200,232,255,0.3); color: var(--accent-v); }
+  .pill-h { background: rgba(255,214,165,0.12); border: 1px solid rgba(255,214,165,0.3); color: var(--accent-h); }
+  .pill-a { background: rgba(181,245,200,0.12); border: 1px solid rgba(181,245,200,0.3); color: var(--accent-a); }
+
+  /* ── Why order matters ── */
+  .order-note {
+    background: rgba(255,229,102,0.08);
+    border: 1px solid rgba(255,229,102,0.25);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .order-note strong { color: var(--yellow); }
+
+  /* ── Link demo area ── */
+  .demo-area {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    min-height: 64px;
+  }
+  .demo-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+  .demo-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ── State indicator badge ── */
+  .state-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    color: var(--muted);
+  }
+
+  /* ════════════════════════════════════════
+     LINK STYLES — each section defines its own
+     ════════════════════════════════════════ */
+
+  /* 1. Bare link (no pseudo-classes) */
+  .demo-bare a {
+    color: #7eb8ff;
+    text-decoration: underline;
+  }
+
+  /* 2. :link only */
+  .demo-link-only a:link {
+    color: #b48eff;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+
+  /* 3. :visited only */
+  .demo-visited-only a:visited {
+    color: #9b7fd4;
+    text-decoration: line-through;
+  }
+
+  /* 4. :hover only */
+  .demo-hover-only a:hover {
+    color: var(--accent-h);
+    background: rgba(255,214,165,0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+
+  /* 5. :active only */
+  .demo-active-only a:active {
+    color: var(--accent-a);
+    transform: scale(0.96);
+    display: inline-block;
+  }
+
+  /* 6. All LVHA in correct order */
+  .demo-full a:link    { color: #b48eff; font-weight: 600; text-decoration: underline; }
+  .demo-full a:visited { color: #7d6eb0; text-decoration: underline; }
+  .demo-full a:hover   { color: var(--accent-h); background: rgba(255,214,165,0.12); padding: 2px 8px; border-radius: 4px; text-decoration: none; }
+  .demo-full a:active  { color: var(--accent-a); outline: 2px solid var(--accent-a); outline-offset: 2px; border-radius: 3px; }
+
+  /* ════════════════════════════════
+     WRONG ORDER DEMO
+     ════════════════════════════════ */
+  /* Wrong: :hover before :visited — hover may not work on visited links */
+  .demo-wrong-order a:link    { color: #b48eff; }
+  .demo-wrong-order a:hover   { color: #ff6b6b; background: rgba(255,107,107,0.15); padding: 2px 6px; border-radius: 4px; text-decoration: none; }
+  .demo-wrong-order a:visited { color: #7d6eb0; }
+  .demo-wrong-order a:active  { color: #ffd6a5; }
+
+  /* ════════════════════════════════
+     PLAYGROUND
+     ════════════════════════════════ */
+  .playground-links a {
+    margin-right: 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  /* ── Toggle switches ── */
+  .controls-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  @media (min-width: 500px) {
+    .controls-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .toggle-card {
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface);
+    text-align: center;
+    user-select: none;
+  }
+  .toggle-card:hover { border-color: rgba(255,255,255,0.2); }
+  .toggle-card.active-toggle { border-color: rgba(255,255,255,0.4); background: var(--surface2); }
+  .toggle-card .toggle-letter {
+    font-size: 1.4rem;
+    font-weight: 800;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .toggle-card .toggle-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    display: block;
+  }
+  .toggle-card.t-l { }
+  .toggle-card.t-l .toggle-letter { color: var(--accent-l); }
+  .toggle-card.t-v .toggle-letter { color: var(--accent-v); }
+  .toggle-card.t-h .toggle-letter { color: var(--accent-h); }
+  .toggle-card.t-a .toggle-letter { color: var(--accent-a); }
+
+  /* live CSS preview */
+  .css-preview {
+    background: #0a0918;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.8;
+    min-height: 80px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* ── Isolated test ── */
+  .isolated-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (min-width: 600px) {
+    .isolated-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .iso-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 12px 10px;
+    text-align: center;
+  }
+  .iso-card .iso-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .iso-card .iso-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* Isolated styles — scoped by class */
+  .iso-l a:link    { color: var(--accent-l); font-weight: 700; background: rgba(232,200,255,0.12); padding: 3px 8px; border-radius: 4px; text-decoration: none; }
+  .iso-v a:visited { color: var(--accent-v); font-style: italic; text-decoration: line-through; opacity: 0.7; }
+  .iso-h a:hover   { color: var(--accent-h); letter-spacing: 0.5px; text-decoration: none; border-bottom: 2px solid var(--accent-h); }
+  .iso-a a:active  { color: var(--accent-a); transform: scale(0.9); display: inline-block; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 2rem 0 1rem;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .footer strong { color: var(--yellow); }
+
+  /* ── Wrong vs Right comparison ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .compare-card {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .compare-header {
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .compare-header.wrong { background: rgba(255,107,107,0.2); color: #ff9a9a; }
+  .compare-header.right { background: rgba(181,245,200,0.15); color: #7ee8a2; }
+  .compare-body {
+    padding: 12px 14px;
+  }
+  .compare-body .code-block {
+    margin-top: 0;
+  }
+
+  /* ── Scroll hint ── */
+  .scroll-btn {
+    display: inline-block;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .scroll-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">CSS Pseudo-Classes</div>
+    <h1>
+      <span class="l">L</span><span class="v">V</span><span class="h">H</span><span class="a">A</span>
+      &nbsp;Explorer
+    </h1>
+    <p>
+      Lord Vader Hates Anakin — your trick for remembering the CSS link pseudo-class order.
+      Click, hover, and explore every state interactively.
+    </p>
+    <div class="nav-pills" style="margin-top: 1.5rem;">
+      <a href="#what-is-lvha">What is LVHA?</a>
+      <a href="#bare">Bare Links</a>
+      <a href="#individual">Individual States</a>
+      <a href="#combined">Combined</a>
+      <a href="#wrong-order">Order Matters!</a>
+      <a href="#isolated">Isolated Tests</a>
+      <a href="#playground">Playground</a>
+    </div>
+  </div>
+
+  <!-- SECTION 1: WHAT IS LVHA -->
+  <div class="section" id="what-is-lvha">
+    <div class="section-header">
+      <div class="section-number" style="background: rgba(255,229,102,0.15); color: var(--yellow);">★</div>
+      <h2>What is LVHA?</h2>
+    </div>
+
+    <div class="lvha-row">
+      <div class="lvha-pill pill-l">
+        <span class="letter">L</span>
+        <span class="word">Lord / Link</span>
+        <span class="selector">a:link</span>
+        <span class="trigger">Unvisited links</span>
+      </div>
+      <div class="lvha-pill pill-v">
+        <span class="letter">V</span>
+        <span class="word">Vader / Visited</span>
+        <span class="selector">a:visited</span>
+        <span class="trigger">Already clicked</span>
+      </div>
+      <div class="lvha-pill pill-h">
+        <span class="letter">H</span>
+        <span class="word">Hates / Hover</span>
+        <span class="selector">a:hover</span>
+        <span class="trigger">Mouse over it</span>
+      </div>
+      <div class="lvha-pill pill-a">
+        <span class="letter">A</span>
+        <span class="word">Anakin / Active</span>
+        <span class="selector">a:active</span>
+        <span class="trigger">Click & hold</span>
+      </div>
+    </div>
+
+    <div class="order-note">
+      <strong>Why does order matter?</strong> CSS reads rules top-to-bottom. If <code>:hover</code> comes before <code>:visited</code>, a visited link being hovered won't show the hover color — the <code>:visited</code> rule below will override it (they have equal specificity). The LVHA order ensures each state can be overridden naturally by later states. Think of it as a cascade: <strong>L → V → H → A</strong> each "wins" over the previous.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2: BARE LINKS -->
+  <div class="section" id="bare">
+    <div class="section-header">
+      <div class="section-number" style="background: rgba(255,255,255,0.06); color: var(--muted);">1</div>
+      <h2>Bare links — no pseudo-classes</h2>
+      <span class="tag" style="background: rgba(255,255,255,0.06); color: var(--muted);">Starting point</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Live demo</div>
+      <div class="demo-label">Try hovering, clicking, and visiting these links:</div>
+      <div class="demo-area demo-bare">
+        <a href="#bare">Home link</a>
+        <a href="#playground">Jump to playground</a>
+        <a href="#isolated">Section link</a>
+      </div>
+      <p class="demo-hint">These use the browser's built-in default styling — no CSS pseudo-classes applied at all.</p>
+
+      <div class="code-block">
+<span class="cmt">/* Just a regular color — no states */</span>
+<span class="sel">a</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#7eb8ff</span><span class="brace">;</span>
+  <span class="prop">text-decoration</span><span class="brace">:</span> <span class="val">underline</span><span class="brace">;</span>
+<span class="brace">}</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3: INDIVIDUAL STATES -->
+  <div class="section" id="individual">
+    <div class="section-header">
+      <div class="section-number" style="background: rgba(232,200,255,0.15); color: var(--accent-l);">2</div>
+      <h2>Each state on its own</h2>
+      <span class="tag" style="background: rgba(232,200,255,0.12); color: var(--accent-l);">One at a time</span>
+    </div>
+
+    <!-- :link -->
+    <div class="card">
+      <div class="card-title" style="color: var(--accent-l);">L — :link (unvisited only)</div>
+      <div class="demo-label">These links have only a :link style. Once visited, the style disappears:</div>
+      <div class="demo-area demo-link-only">
+        <a href="#link-demo-1">Unvisited link 1</a>
+        <a href="#link-demo-2">Unvisited link 2</a>
+        <a href="#link-demo-3">Click me to visit!</a>
+      </div>
+      <p class="demo-hint">Visit the links — notice how the purple style disappears once clicked (no :visited style is defined).</p>
+      <div class="code-block">
+<span class="sel">a:link</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#b48eff</span><span class="brace">;</span>         <span class="cmt">/* purple — unvisited */</span>
+  <span class="prop">font-weight</span><span class="brace">:</span> <span class="val">600</span><span class="brace">;</span>
+<span class="brace">}</span>
+      </div>
+    </div>
+
+    <!-- :visited -->
+    <div class="card">
+      <div class="card-title" style="color: var(--accent-v);">V — :visited (already clicked)</div>
+      <div class="demo-label">Click these links, then come back to see the visited style:</div>
+      <div class="demo-area demo-visited-only">
+        <a href="#visited-demo-1">Visit me!</a>
+        <a href="#visited-demo-2">Click first, look after</a>
+        <a href="#visited-demo-3">Another one</a>
+      </div>
+      <p class="demo-hint">After clicking, the link gets a strikethrough and different color. This is :visited in action.</p>
+      <div class="code-block">
+<span class="sel">a:visited</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#9b7fd4</span><span class="brace">;</span>         <span class="cmt">/* faded purple */</span>
+  <span class="prop">text-decoration</span><span class="brace">:</span> <span class="val">line-through</span><span class="brace">;</span>
+<span class="brace">}</span>
+      </div>
+    </div>
+
+    <!-- :hover -->
+    <div class="card">
+      <div class="card-title" style="color: var(--accent-h);">H — :hover (mouse over)</div>
+      <div class="demo-label">Move your mouse over these links:</div>
+      <div class="demo-area demo-hover-only">
+        <a href="#h1">Hover over me</a>
+        <a href="#h2">Try hovering here too</a>
+        <a href="#h3">And this one!</a>
+      </div>
+      <p class="demo-hint">The link gets a warm orange background and the underline disappears on hover.</p>
+      <div class="code-block">
+<span class="sel">a:hover</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#ffd6a5</span><span class="brace">;</span>
+  <span class="prop">background</span><span class="brace">:</span> <span class="val">rgba(255, 214, 165, 0.15)</span><span class="brace">;</span>
+  <span class="prop">padding</span><span class="brace">:</span> <span class="val">2px 6px</span><span class="brace">;</span>
+  <span class="prop">border-radius</span><span class="brace">:</span> <span class="val">4px</span><span class="brace">;</span>
+  <span class="prop">text-decoration</span><span class="brace">:</span> <span class="val">none</span><span class="brace">;</span>
+<span class="brace">}</span>
+      </div>
+    </div>
+
+    <!-- :active -->
+    <div class="card">
+      <div class="card-title" style="color: var(--accent-a);">A — :active (click and hold!)</div>
+      <div class="demo-label">Click and hold your mouse down on these links:</div>
+      <div class="demo-area demo-active-only">
+        <a href="#a1">Click &amp; HOLD me</a>
+        <a href="#a2">Hold the click down!</a>
+        <a href="#a3">Press and hold</a>
+      </div>
+      <p class="demo-hint">:active only fires while the mouse button is held down. It's easy to miss — try holding!</p>
+      <div class="code-block">
+<span class="sel">a:active</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#b5f5c8</span><span class="brace">;</span>         <span class="cmt">/* green — the "press" moment */</span>
+  <span class="prop">transform</span><span class="brace">:</span> <span class="val">scale(0.96)</span><span class="brace">;</span>
+  <span class="prop">display</span><span class="brace">:</span> <span class="val">inline-block</span><span class="brace">;</span> <span class="cmt">/* needed for transform */</span>
+<span class="brace">}</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4: ALL COMBINED -->
+  <div class="section" id="combined">
+    <div class="section-header">
+      <div class="section-number" style="background: rgba(181,245,200,0.12); color: var(--accent-a);">3</div>
+      <h2>All four states together</h2>
+      <span class="tag" style="background: rgba(181,245,200,0.1); color: var(--accent-a);">Full LVHA</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Live demo — all states active</div>
+      <div class="demo-label">Hover, click, hold, and revisit these links:</div>
+      <div class="demo-area demo-full">
+        <a href="#full-1">Try me out</a>
+        <a href="#full-2">Click to visit</a>
+        <a href="#full-3">Hold the click!</a>
+        <a href="#full-4">Full experience</a>
+      </div>
+      <p class="demo-hint">Purple = unvisited · Faded = visited · Orange glow = hover · Green flash = active (hold click)</p>
+
+      <div class="code-block">
+<span class="cmt">/* ✅ Correct LVHA order */</span>
+
+<span class="sel">a:link</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#b48eff</span><span class="brace">;</span>
+  <span class="prop">font-weight</span><span class="brace">:</span> <span class="val">600</span><span class="brace">;</span>
+  <span class="prop">text-decoration</span><span class="brace">:</span> <span class="val">underline</span><span class="brace">;</span>
+<span class="brace">}</span>
+
+<span class="sel">a:visited</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#7d6eb0</span><span class="brace">;</span>       <span class="cmt">/* faded, less emphasis */</span>
+  <span class="prop">text-decoration</span><span class="brace">:</span> <span class="val">underline</span><span class="brace">;</span>
+<span class="brace">}</span>
+
+<span class="sel">a:hover</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#ffd6a5</span><span class="brace">;</span>
+  <span class="prop">background</span><span class="brace">:</span> <span class="val">rgba(255,214,165, 0.12)</span><span class="brace">;</span>
+  <span class="prop">padding</span><span class="brace">:</span> <span class="val">2px 8px</span><span class="brace">;</span>
+  <span class="prop">border-radius</span><span class="brace">:</span> <span class="val">4px</span><span class="brace">;</span>
+  <span class="prop">text-decoration</span><span class="brace">:</span> <span class="val">none</span><span class="brace">;</span>
+<span class="brace">}</span>
+
+<span class="sel">a:active</span> <span class="brace">{</span>
+  <span class="prop">color</span><span class="brace">:</span> <span class="val">#b5f5c8</span><span class="brace">;</span>
+  <span class="prop">outline</span><span class="brace">:</span> <span class="val">2px solid #b5f5c8</span><span class="brace">;</span>
+  <span class="prop">border-radius</span><span class="brace">:</span> <span class="val">3px</span><span class="brace">;</span>
+<span class="brace">}</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 5: WRONG ORDER -->
+  <div class="section" id="wrong-order">
+    <div class="section-header">
+      <div class="section-number" style="background: rgba(255,107,107,0.15); color: #ff9a9a;">!</div>
+      <h2>Order matters — see the bug!</h2>
+      <span class="tag" style="background: rgba(255,107,107,0.12); color: #ff9a9a;">Watch out</span>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-header wrong">❌ Wrong order</div>
+        <div class="compare-body">
+          <div class="demo-area demo-wrong-order" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+            <a href="#wrong-1">Click me first, then hover</a>
+            <a href="#wrong-2">Try hover on a visited link</a>
+          </div>
+          <p class="demo-hint" style="color: #ff9a9a;">After visiting, hover won't turn red — :visited overrides :hover</p>
+          <div class="code-block" style="margin-top: 12px;">
+<span class="sel">a:link</span>    <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">#b48eff</span> <span class="brace">}</span>
+<span class="sel">a:hover</span>   <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">red</span> <span class="brace">}</span>   <span class="cmt">← 2nd</span>
+<span class="sel">a:visited</span> <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">gray</span> <span class="brace">}</span>  <span class="cmt">← 3rd overrides!</span>
+<span class="sel">a:active</span>  <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">lime</span> <span class="brace">}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-header right">✅ Correct order</div>
+        <div class="compare-body">
+          <div class="demo-area demo-full" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+            <a href="#right-1">Click me first, then hover</a>
+            <a href="#right-2">Hover on a visited link</a>
+          </div>
+          <p class="demo-hint" style="color: #7ee8a2;">Even after visiting, hover still glows orange!</p>
+          <div class="code-block" style="margin-top: 12px;">
+<span class="sel">a:link</span>    <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">#b48eff</span> <span class="brace">}</span>  <span class="cmt">← 1st</span>
+<span class="sel">a:visited</span> <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">gray</span> <span class="brace">}</span>   <span class="cmt">← 2nd</span>
+<span class="sel">a:hover</span>   <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">orange</span> <span class="brace">}</span> <span class="cmt">← 3rd wins!</span>
+<span class="sel">a:active</span>  <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">lime</span> <span class="brace">}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 6: ISOLATED TESTS -->
+  <div class="section" id="isolated">
+    <div class="section-header">
+      <div class="section-number" style="background: rgba(200,232,255,0.12); color: var(--accent-v);">4</div>
+      <h2>Isolated one-by-one tests</h2>
+      <span class="tag" style="background: rgba(200,232,255,0.08); color: var(--accent-v);">Clean room</span>
+    </div>
+    <p style="color: var(--muted); font-size: 14px; margin-bottom: 1rem;">Each card below tests <em>only one</em> pseudo-class with a very visible style, so you can clearly see each in isolation.</p>
+
+    <div class="isolated-grid">
+
+      <div class="iso-card iso-l">
+        <div class="iso-title" style="color: var(--accent-l);">:link test</div>
+        <a href="#iso-link-1">Unvisited link</a>
+        <p class="iso-hint">Should show purple pill. Disappears once visited.</p>
+      </div>
+
+      <div class="iso-card iso-v">
+        <div class="iso-title" style="color: var(--accent-v);">:visited test</div>
+        <a href="#iso-visited-1">Click to visit me</a>
+        <p class="iso-hint">Click it. It'll turn blue + italic + strikethrough.</p>
+      </div>
+
+      <div class="iso-card iso-h">
+        <div class="iso-title" style="color: var(--accent-h);">:hover test</div>
+        <a href="#iso-hover-1">Hover over me</a>
+        <p class="iso-hint">Move your mouse over it. Watch the underline change.</p>
+      </div>
+
+      <div class="iso-card iso-a">
+        <div class="iso-title" style="color: var(--accent-a);">:active test</div>
+        <a href="#iso-active-1">Click &amp; hold!</a>
+        <p class="iso-hint">Hold the click down — it'll shrink/turn green while held.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 7: PLAYGROUND -->
+  <div class="section" id="playground">
+    <div class="section-header">
+      <div class="section-number" style="background: rgba(255,229,102,0.12); color: var(--yellow);">5</div>
+      <h2>Live playground</h2>
+      <span class="tag" style="background: rgba(255,229,102,0.1); color: var(--yellow);">Build your own</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Toggle states on/off and see the CSS update live</div>
+
+      <div class="controls-grid">
+        <div class="toggle-card t-l active-toggle" id="toggle-l" onclick="toggleState('l')">
+          <span class="toggle-letter">L</span>
+          <span class="toggle-label">:link</span>
+        </div>
+        <div class="toggle-card t-v active-toggle" id="toggle-v" onclick="toggleState('v')">
+          <span class="toggle-letter">V</span>
+          <span class="toggle-label">:visited</span>
+        </div>
+        <div class="toggle-card t-h active-toggle" id="toggle-h" onclick="toggleState('h')">
+          <span class="toggle-letter">H</span>
+          <span class="toggle-label">:hover</span>
+        </div>
+        <div class="toggle-card t-a active-toggle" id="toggle-a" onclick="toggleState('a')">
+          <span class="toggle-letter">A</span>
+          <span class="toggle-label">:active</span>
+        </div>
+      </div>
+
+      <div class="demo-label" style="margin-top: 1rem;">Your links (interact with them!):</div>
+      <div class="demo-area playground-links" id="pg-demo">
+        <a href="#pg-1">Click me</a>
+        <a href="#pg-2">Visit me</a>
+        <a href="#pg-3">Hover me</a>
+        <a href="#pg-4">Hold me</a>
+      </div>
+
+      <div class="demo-label" style="margin-top: 1.25rem;">Generated CSS (in LVHA order):</div>
+      <div class="css-preview" id="css-preview"></div>
+
+      <p class="demo-hint">Click the toggles above to enable/disable each pseudo-class. The CSS updates instantly.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CHEATSHEET -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number" style="background: rgba(255,229,102,0.12); color: var(--yellow);">✦</div>
+      <h2>Quick cheatsheet</h2>
+    </div>
+    <div class="card">
+      <div class="code-block" style="margin-top: 0;">
+<span class="cmt">/* 🗡️  Lord Vader Hates Anakin — remember the order! */</span>
+
+<span class="sel">a:link</span>    <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">blue</span><span class="brace">;</span>   <span class="brace">}</span>  <span class="cmt">/* 1. Unvisited link */</span>
+<span class="sel">a:visited</span> <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">purple</span><span class="brace">;</span><span class="brace">}</span>  <span class="cmt">/* 2. Already visited */</span>
+<span class="sel">a:hover</span>   <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">orange</span><span class="brace">;</span><span class="brace">}</span>  <span class="cmt">/* 3. Mouse is over it */</span>
+<span class="sel">a:active</span>  <span class="brace">{</span> <span class="prop">color</span><span class="brace">:</span> <span class="val">red</span><span class="brace">;</span>   <span class="brace">}</span>  <span class="cmt">/* 4. Click & hold */</span>
+
+<span class="cmt">/* ⚠️  Always keep this exact order or hover/active may not work! */</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Made for CSS beginners · Remember: <strong>Lord Vader Hates Anakin</strong> = <strong>L · V · H · A</strong>
+  </div>
+
+</div>
+
+<style id="playground-style"></style>
+
+<script>
+  const states = { l: true, v: true, h: true, a: true };
+
+  const styles = {
+    l: `a:link {\n  color: #b48eff;\n  font-weight: 600;\n  text-decoration: underline;\n}`,
+    v: `a:visited {\n  color: #7d6eb0;\n  opacity: 0.75;\n  text-decoration: underline;\n}`,
+    h: `a:hover {\n  color: #ffd6a5;\n  background: rgba(255,214,165,0.15);\n  padding: 2px 8px;\n  border-radius: 4px;\n  text-decoration: none;\n}`,
+    a: `a:active {\n  color: #b5f5c8;\n  outline: 2px solid #b5f5c8;\n  outline-offset: 2px;\n  border-radius: 3px;\n}`
+  };
+
+  const colors = { l: '#e8c8ff', v: '#c8e8ff', h: '#ffd6a5', a: '#b5f5c8' };
+
+  function toggleState(key) {
+    states[key] = !states[key];
+    const card = document.getElementById('toggle-' + key);
+    card.classList.toggle('active-toggle', states[key]);
+    card.style.opacity = states[key] ? '1' : '0.35';
+    updatePlayground();
+  }
+
+  function updatePlayground() {
+    const order = ['l','v','h','a'];
+    let cssText = '';
+    let previewText = '';
+    const pgStyle = document.getElementById('playground-style');
+    const pgDemo = document.getElementById('pg-demo');
+
+    order.forEach(key => {
+      if (states[key]) {
+        cssText += '#pg-demo ' + styles[key].replace(/\n/g, '\n') + '\n\n';
+        previewText += colorizeCSS('#pg-demo ' + styles[key]) + '\n\n';
+      }
+    });
+
+    pgStyle.textContent = cssText.trim() || '#pg-demo a { color: #7eb8ff; }';
+
+    if (!cssText.trim()) {
+      document.getElementById('css-preview').innerHTML =
+        '<span style="color:#555570; font-style:italic;">/* all states disabled — bare link */\n#pg-demo a { color: #7eb8ff; }</span>';
+    } else {
+      document.getElementById('css-preview').innerHTML = previewText.trim();
+    }
+  }
+
+  function colorizeCSS(css) {
+    return css
+      .replace(/(a:link|a:visited|a:hover|a:active)/g, '<span style="color:#ff9de2">$1</span>')
+      .replace(/(color|font-weight|text-decoration|background|padding|border-radius|opacity|outline|outline-offset):/g, '<span style="color:#79d4fd">$1</span>:')
+      .replace(/: ([^;\n]+)/g, ': <span style="color:#f5c842">$1</span>')
+      .replace(/([{}])/g, '<span style="color:#888">$1</span>');
+  }
+
+  // Init
+  updatePlayground();
+
+  // Prevent all links from navigating
+  document.querySelectorAll('a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href && (href.startsWith('http') || href.startsWith('mailto'))) return;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+    });
+  });
+</script>
+
+</body>
+</html>
