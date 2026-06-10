@@ -64,7 +64,6 @@ a:active {
     color: rgb(224, 142, 235);
     text-decoration: none;
     background-size: 0%;  /* suppress inherited sweep */
-    font-weight: 600;
 }
 
 .nav-link:hover::after {
@@ -108,13 +107,10 @@ a:active {
 }
 
 .btn:hover {
-    background-color: rgb(184, 132, 28);
-    border-color: rgba(255, 220, 100, 0.7);
     text-decoration: none;
     font-family: sans-serif;
-    font-size: 30px;
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(184, 132, 28, 0.45);
+    box-shadow: 0 8px 20px white;
     animation: none; /* pause pulse on hover */
     background-image: none;
 }
@@ -143,7 +139,6 @@ a:active {
 }
 
 .activity:hover {
-    color: yellow;
     font-weight: 600;
     background-color: #1a60e8;
     border-color: limegreen;
@@ -153,8 +148,6 @@ a:active {
 }
 
 .activity:active {
-    color: red;
-    background-color: yellow;
     transform: translateY(0px) scale(0.98);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     background-image: none;
