@@ -1,213 +1,332 @@
 /*
   Codecademy : Web Development Foundations
-  Enhanced Links & Buttons  DeepSeek
+  Enhanced Links & Buttons with DeepSeek
 */
 
-/* ─── Body links ─────────────────────────────────────────────────────────── */
+/* ============================================
+   GLOBAL LINK STYLES
+   ============================================ */
+
+/* All links on the page */
 a {
-    color: #2176FF;
-    text-decoration: none;
-    position: relative;
-    background-image: linear-gradient(#2176FF, #2176FF);
-    background-size: 0% 1px;
-    background-repeat: no-repeat;
-    background-position: left bottom;
-    transition: background-size 0.3s ease, color 0.25s ease;
+  color: #2176FF;
+  text-decoration: none;
+  position: relative;
+  
+  /* Underline effect that grows from left to right */
+  background-image: linear-gradient(#2176FF, #2176FF);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  
+  transition: background-size 0.3s ease, color 0.25s ease;
 }
 
-a:link    { color: #2176FF; }
-a:visited { color: #5a4fcf; }
+/* Link states */
+a:link {
+  color: #2176FF;
+}
+
+a:visited {
+  color: #5a4fcf;
+}
 
 a:hover {
-    color: #1558cc;
-    background-size: 100% 1px;
+  color: #1558cc;
+  background-size: 100% 1px;
 }
 
-a:active  { color: #0e3d99; }
+a:active {
+  color: #0e3d99;
+}
 
-/* ─── Special underline effect for hover-underline class (Breckenridge & Rigatoni) ─ */
+/* ============================================
+   GLOWING EFFECT FOR NAVIGATION LINKS
+   ============================================ */
+
+.glow-on-hover {
+  width: 220px;
+  height: 50px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: #111;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 50px;
+  display: inline-block;
+}
+
+.glow-on-hover:before {
+  content: '';
+  background: linear-gradient(45deg, 
+    rgba(255, 0, 0, 0.5), 
+    rgba(255, 115, 0, 0.5), 
+    rgba(255, 251, 0, 0.5), 
+    rgba(72, 255, 0, 0.5), 
+    rgba(0, 255, 213, 0.5), 
+    rgba(0, 43, 255, 0.5), 
+    rgba(122, 0, 255, 0.5), 
+    rgba(255, 0, 200, 0.5), 
+    rgba(255, 0, 0, 0.5));
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+  border-radius: 10px;
+}
+
+.glow-on-hover:active {
+  color: #000;
+}
+
+.glow-on-hover:active:after {
+  background: transparent;
+}
+
+.glow-on-hover:hover:before {
+  opacity: 1;
+}
+
+.glow-on-hover:after {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+/* Glowing animation keyframes */
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* ============================================
+   SPECIAL UNDERLINE EFFECT (for Breckenridge & Rigatoni)
+   ============================================ */
+
 .hover-underline {
-    font-size: inherit;
-    color: #2176FF;
-    position: relative;
-    display: inline-block;
-    background-image: none;
+  font-size: inherit;
+  color: #2176FF;
+  position: relative;
+  display: inline-block;
+  background-image: none;  /* Removes the default underline */
 }
 
+/* Creates two colored lines (top and bottom) */
 .hover-underline::after,
 .hover-underline::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(to right, #ff0000, #00ffff);
-    bottom: -5px;
-    left: 0;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.4s ease-out;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, #ff0000, #00ffff);  /* Red to cyan gradient */
+  bottom: -5px;
+  left: 0;
+  transform: scaleX(0);      /* Hidden by default */
+  transform-origin: right;
+  transition: transform 0.4s ease-out;
 }
 
+/* Top line */
 .hover-underline::before {
-    top: -5px;
-    transform-origin: left;
+  top: -5px;
+  transform-origin: left;
 }
 
+/* Reveal both lines on hover */
 .hover-underline:hover::after,
 .hover-underline:hover::before {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
 
 .hover-underline:hover {
-    color: #2176FF;
-    background-size: 0%;
+  color: #2176FF;
+  background-size: 0%;
 }
 
+/* Shrink effect when clicking */
 .hover-underline:active {
-    transform: scale(0.95);
+  transform: scale(0.9);
 }
 
-/* ─── Nav links ──────────────────────────────────────────────────────────── */
+/* ============================================
+   NAVIGATION LINKS
+   ============================================ */
+
 .nav-link {
-    position: relative;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.2s ease;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
+/* Creates the underline for nav links */
 .nav-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0;
-    height: 2px;
-    background-color: #2176FF;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: #2176FF;
+  transition: width 0.3s ease;
 }
 
 .nav-link:hover {
-    color: #2176FF;
-    text-decoration: none;
-    background-size: 0%;
-}
-
-.nav-link:hover::after {
-    width: 100%;
-}
-
-.nav-link:active {
-    transform: scale(0.95);
-}
-
-/* ─── CTA Button — Frosted glass pill ───────────────────────────────────── */
-/*
-  Glass morphism: semi-transparent white + backdrop blur gives a
-  frosted-window feel that sits naturally over the hero image.
-  border-radius: 999px makes it a pill shape at any text length.
-  The pulse animation draws the eye on load; it pauses on hover.
-  ::before wipe-fill is preserved for the hover fill effect.
-*/
-.btn {
-    display: inline-block;
-    position: relative;
-    overflow: hidden;
-    z-index: 0;
-
-    /* Glass */
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-
-    /* Shape */
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 999px;
-    padding: 14px 36px;
-
-    /* Type */
-    color: white !important;
-    cursor: pointer;
-    text-decoration: none;
-    font-family: 'Raleway', sans-serif;
-    font-size: 16px;
     font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-
-    /* Motion */
-    animation: btn-pulse 2.8s ease-out infinite;
-    transition: transform 0.25s ease,
-                box-shadow 0.25s ease,
-                backdrop-filter 0.25s ease,
-                border-color 0.25s ease;
-
-    background-image: none;
+  color: white;
+  text-decoration: none;
+  background-size: 0%;
 }
 
-/* Wipe-fill slides up from below on hover */
+/* Expands the underline on hover */
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Shrink effect when clicking */
+.nav-link:active {
+  transform: scale(0.9);
+}
+
+/* ============================================
+   CTA BUTTON (Get on the mountain)
+   ============================================ */
+
+.btn {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  
+  /* Glass morphism effect - frosted glass look */
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  /* Shape */
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;      /* Pill shape */
+  padding: 14px 36px;
+  
+  /* Typography */
+  color: white !important;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  
+  /* Animation */
+  animation: btn-pulse 2.8s ease-out infinite;
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease,
+              backdrop-filter 0.25s ease,
+              border-color 0.25s ease;
+  
+  background-image: none;
+}
+
+/* Wipe-fill effect that slides up from bottom on hover */
 .btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: rgba(33, 118, 255, 0.5);
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-    z-index: -1;
-    border-radius: 999px;
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(33, 118, 255, 0.2);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+  border-radius: 999px;
 }
 
+/* Pulsing animation to draw attention */
 @keyframes btn-pulse {
-    0%   { box-shadow: 0 0 0 0   rgba(255, 255, 255, 0.45); }
-    55%  { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
-    100% { box-shadow: 0 0 0 0   rgba(255, 255, 255, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.45);
+  }
+  55% {
+    box-shadow: 0 0 0 12px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
 }
 
+/* Button hover state */
 .btn:hover {
-    transform: translateY(-6px);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    border-color: rgba(255, 255, 255, 0.9);
-    animation: none;
-    text-decoration: none;
-    background-image: none;
-    color: white !important;
+  transform: translateY(-6px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.9);
+  animation: none;
+  text-decoration: none;
+  background-image: none;
+  color: white;
 }
 
-.btn:hover::before { transform: translateY(0%); }
+/* Reveal the wipe-fill on hover */
+.btn:hover::before {
+  transform: translateY(0%);
+}
 
+/* Button active (click) state */
 .btn:active {
-    transform: translateY(-1px) scale(0.96);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    background-image: none;
-    color: white !important;
+  transform: translateY(-1px) scale(0.96);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  background-image: none;
+  color: white !important;
 }
 
-/* ─── Activity cards ─────────────────────────────────────────────────────── */
+/* ============================================
+   ACTIVITY CARDS
+   ============================================ */
+
 .activity {
-    background-image: none;
-    transition: color 0.2s ease,
-                background-color 0.25s ease,
-                border-color 0.2s ease,
-                transform 0.2s ease,
-                box-shadow 0.2s ease;
+  background-image: none;
+  transition: color 0.2s ease,
+              background-color 0.25s ease,
+              border-color 0.2s ease,
+              transform 0.2s ease,
+              box-shadow 0.2s ease;
 }
 
+/* Activity card hover state */
 .activity:hover {
-    color: #ffffff;
-    background-color: #1a60e8;
-    border-color: rgba(255, 255, 255, 0.7);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-    background-image: none;
+  color: #ffffff;
+  background-color: #1a60e8;
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  background-image: none;
 }
 
+/* Activity card active (click) state */
 .activity:active {
-    background-color: #ffffff;
-    color: #2176FF;
-    border-color: #2176FF;
-    transform: translateY(0px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    background-image: none;
+  background-color: #ffffff;
+  color: #2176FF;
+  border-color: #2176FF;
+  transform: translateY(0px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background-image: none;
 }
