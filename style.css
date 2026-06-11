@@ -1,27 +1,12 @@
 /*
   Codecademy : Web Development Foundations
-  Enhanced Links & Buttons — Professional Revision
+  Enhanced Links & Buttons  DeepSeek
 */
-
-/* ole-regular - latin */
-@font-face {
-  font-display: swap;
-  font-family: 'Ole';
-  font-style: normal;
-  font-weight: 400;
-  src: url('fonts/ole-v3-latin-regular.woff2') format('woff2');
-}
 
 /* ─── Body links ─────────────────────────────────────────────────────────── */
-/*
-  Uses the site's brand blue instead of purple-pink.
-  The underline sweeps in from the left on hover.
-  All four LVHA states are declared in the correct order.
-*/
 a {
     color: #2176FF;
     text-decoration: none;
-    cursor: pointer;
     position: relative;
     background-image: linear-gradient(#2176FF, #2176FF);
     background-size: 0% 1px;
@@ -30,44 +15,76 @@ a {
     transition: background-size 0.3s ease, color 0.25s ease;
 }
 
-a:link {
-    color: #2176FF;
-}
-
-a:visited {
-    color: #5a4fcf;
-}
+a:link    { color: #2176FF; }
+a:visited { color: #5a4fcf; }
 
 a:hover {
     color: #1558cc;
     background-size: 100% 1px;
 }
 
-a:active {
-    color: #0e3d99;
+a:active  { color: #0e3d99; }
+
+/* ─── Special underline effect for hover-underline class (Breckenridge & Rigatoni) ─ */
+.hover-underline {
+    font-size: inherit;
+    color: #2176FF;
+    position: relative;
+    display: inline-block;
+    background-image: none;
+}
+
+.hover-underline::after,
+.hover-underline::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #ff0000, #00ffff);
+    bottom: -5px;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease-out;
+}
+
+.hover-underline::before {
+    top: -5px;
+    transform-origin: left;
+}
+
+.hover-underline:hover::after,
+.hover-underline:hover::before {
+    transform: scaleX(1);
+}
+
+.hover-underline:hover {
+    color: #2176FF;
+    background-size: 0%;
+}
+
+.hover-underline:active {
+    transform: scale(0.95);
 }
 
 /* ─── Nav links ──────────────────────────────────────────────────────────── */
-/*
-  A clean bottom border slides in from the left on hover.
-  No color shift — the underline alone signals the state.
-*/
 .nav-link {
-    cursor: pointer;
-    background-image: none;
     position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
     transition: color 0.2s ease;
 }
 
 .nav-link::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
-    bottom: 0;
-    width: 0%;
+    bottom: -4px;
+    width: 0;
     height: 2px;
     background-color: #2176FF;
-    transition: width 0.25s ease;
+    transition: width 0.3s ease;
 }
 
 .nav-link:hover {
@@ -80,19 +97,36 @@ a:active {
     width: 100%;
 }
 
-/* ─── CTA Button ─────────────────────────────────────────────────────────── */
+.nav-link:active {
+    transform: scale(0.95);
+}
+
+/* ─── CTA Button — Frosted glass pill ───────────────────────────────────── */
 /*
-  Gentle pulse draws the eye on load.
-  Hover: a background fill wipes upward — no font/size jumping.
-  Active: presses down with a subtle shadow.
+  Glass morphism: semi-transparent white + backdrop blur gives a
+  frosted-window feel that sits naturally over the hero image.
+  border-radius: 999px makes it a pill shape at any text length.
+  The pulse animation draws the eye on load; it pauses on hover.
+  ::before wipe-fill is preserved for the hover fill effect.
 */
 .btn {
     display: inline-block;
     position: relative;
     overflow: hidden;
-    background-color: rgba(55, 125, 160, 0.55);
-    padding: 14px 32px;
-    color: white;
+    z-index: 0;
+
+    /* Glass */
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    /* Shape */
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 999px;
+    padding: 14px 36px;
+
+    /* Type */
+    color: white !important;
     cursor: pointer;
     text-decoration: none;
     font-family: 'Raleway', sans-serif;
@@ -100,59 +134,57 @@ a:active {
     font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    border-radius: 3px;
+
+    /* Motion */
     animation: btn-pulse 2.8s ease-out infinite;
-    transition: transform 0.15s ease,
-                box-shadow 0.2s ease,
-                border-color 0.2s ease;
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                backdrop-filter 0.25s ease,
+                border-color 0.25s ease;
+
     background-image: none;
-    z-index: 0;
 }
 
-/* Wipe fill — hidden by default, slides up on hover */
+/* Wipe-fill slides up from below on hover */
 .btn::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-color: rgba(33, 118, 255, 0.75);
+    background-color: rgba(33, 118, 255, 0.5);
     transform: translateY(100%);
     transition: transform 0.3s ease;
     z-index: -1;
+    border-radius: 999px;
 }
 
 @keyframes btn-pulse {
-    0%   { box-shadow: 0 0 0 0   rgba(55, 125, 160, 0.5); }
-    55%  { box-shadow: 0 0 0 10px rgba(55, 125, 160, 0); }
-    100% { box-shadow: 0 0 0 0   rgba(55, 125, 160, 0); }
+    0%   { box-shadow: 0 0 0 0   rgba(255, 255, 255, 0.45); }
+    55%  { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0   rgba(255, 255, 255, 0); }
 }
 
 .btn:hover {
-    text-decoration: none;
+    transform: translateY(-6px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     border-color: rgba(255, 255, 255, 0.9);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     animation: none;
+    text-decoration: none;
     background-image: none;
+    color: white !important;
 }
 
-.btn:hover::before {
-    transform: translateY(0%);
-}
+.btn:hover::before { transform: translateY(0%); }
 
 .btn:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-1px) scale(0.96);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     background-image: none;
+    color: white !important;
 }
 
 /* ─── Activity cards ─────────────────────────────────────────────────────── */
-/*
-  Hover: crisp border-color shift to white + text brightens. Subtle lift.
-  Active: clean inversion — white background, blue text.
-  No jarring scale or erratic color jumps.
-*/
 .activity {
     background-image: none;
     transition: color 0.2s ease,
